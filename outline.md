@@ -20,5 +20,7 @@
     - Each character element will have button options to add effects.
     - Effects will show up as horizontally parallel elements to the character elements
 
-## Features
-    
+- ### Features
+    - Turn order tracking for characters in created campaigns
+    - Tracking of effects on characters 
+    - Custom effect creation
