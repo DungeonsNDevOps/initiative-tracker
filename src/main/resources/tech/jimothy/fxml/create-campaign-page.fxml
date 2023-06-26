@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
@@ -25,11 +24,6 @@
             <Font name="Book Antiqua" size="24.0" />
          </font>
       </Label>
-      <MenuButton layoutX="298.0" layoutY="271.0" mnemonicParsing="false" text="MenuButton">
-        <items>
-            <RadioMenuItem mnemonicParsing="false" text="Unspecified Action" />
-            <RadioMenuItem mnemonicParsing="false" text="Unspecified Action" />
-        </items>
-      </MenuButton>
+      <MenuButton layoutX="298.0" layoutY="271.0" mnemonicParsing="false" text="MenuButton" />
    </children>
 </AnchorPane>
