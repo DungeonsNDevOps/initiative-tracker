@@ -6,3 +6,6 @@ build
 
 #ignore bin
 bin
+
+#ignore sql folder
+sqlite
