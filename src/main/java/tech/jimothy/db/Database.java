@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
@@ -63,7 +64,6 @@ public class Database {
     }
 
     private boolean parentDirectoryExists(String url){
-        boolean exists;
         String[] urlist = url.split("/");
         this.parentDirectory = "";
 
@@ -72,12 +72,7 @@ public class Database {
         }
 
         Path path = Paths.get(this.parentDirectory);
-        if (Files.exists(path)){
-            exists = true;
-        } else{
-            exists = false;
-        }
-        return exists;
+        return (Files.exists(path));
     }
 
     private void execSchema(File schema) throws FileNotFoundException{
@@ -103,4 +98,46 @@ public class Database {
 
         schemaScan.close();
     }
+
+    /**
+     * Method allows inserting records into the database
+     * 
+     * @param statement The SQL insert statement
+     * @param args The values passed into the statement. Currently, only what can be 
+     * interpreted as strings or ints are accepted
+     * @throws SQLException
+     */
+    public void insert(String statement, String[] args) throws SQLException{
+        PreparedStatement pstmt = this.conn.prepareStatement(statement);
+        for(int i = 0; i < args.length; i++){
+            if(isInteger(args[i])){
+                int num = Integer.parseInt(args[i]);
+                pstmt.setInt(i, num);
+            } else{
+                pstmt.setString(i, args[i]);
+            }
+        }
+        pstmt.executeUpdate();
+    }
+
+    public void query(String statement){
+        ;//TO-DO: Write method to execute a query
+    }
+
+    private boolean isInteger(String s){
+        for (int i = 0; i < s.length(); i++){
+            if (i == 0 && s.charAt(i) == '-'){
+                if (s.length() == 1){
+                    return false;
+                }            
+            } else {
+                continue;
+            }
+            if (!Character.isDigit(s.charAt(i))){
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
