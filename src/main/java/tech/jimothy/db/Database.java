@@ -9,9 +9,11 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
+import tech.jimothy.utils.Integers;
 
 public class Database {
     //The directory path provided for the location of the database
@@ -83,11 +85,18 @@ public class Database {
         while (schemaScan.hasNext()){
             sql += schemaScan.nextLine() + "\n";
         }
+
+        String [] sqlStatements = sql.split(";");
+
+        System.out.println(sql);
         try{
             if(dbFile.length() == 0){
-                Statement statement = this.conn.createStatement();
-                statement.execute(sql);
+                for(String stmt : sqlStatements){
+                    Statement statement = this.conn.createStatement();
+                    statement.execute(stmt);
+                }
                 System.out.println("Database: Successfully executed schema.sql");
+                
             } else{
                 System.out.println("Database: Schema.sql has already been executed!");
             }
@@ -110,34 +119,46 @@ public class Database {
     public void insert(String statement, String[] args) throws SQLException{
         PreparedStatement pstmt = this.conn.prepareStatement(statement);
         for(int i = 0; i < args.length; i++){
-            if(isInteger(args[i])){
+            if(Integers.isInteger(args[i])){
                 int num = Integer.parseInt(args[i]);
-                pstmt.setInt(i, num);
+                pstmt.setInt(i + 1, num);
             } else{
-                pstmt.setString(i, args[i]);
+                pstmt.setString(i + 1, args[i]);
             }
         }
         pstmt.executeUpdate();
     }
 
-    public void query(String statement){
-        ;//TO-DO: Write method to execute a query
+    public Table query(String statement){
+        
+        try { 
+            Statement stmt= this.conn.createStatement();
+            ResultSet rSet = stmt.executeQuery(statement);
+            return new Table(rSet);
+
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    private boolean isInteger(String s){
-        for (int i = 0; i < s.length(); i++){
-            if (i == 0 && s.charAt(i) == '-'){
-                if (s.length() == 1){
-                    return false;
-                }            
-            } else {
-                continue;
-            }
-            if (!Character.isDigit(s.charAt(i))){
-                return false;
-            }
+    public void close(){
+        try {
+            this.conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return true;
+    }
+
+    public void modify(String sql) throws SQLException{
+        Statement stmt = this.conn.createStatement();
+
+        stmt.execute(sql);
+        
+    }
+
+    public void set(String sql, String[] args){
+        ;
     }
 
 }
