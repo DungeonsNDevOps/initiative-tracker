@@ -43,15 +43,15 @@
   <children>
       <MenuBar>
         <menus>
-          <Menu mnemonicParsing="false" text="File">
+          <Menu mnemonicParsing="false" text="Campaigns">
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#goToCreateCampaign" text="New Campaign" />
-              <MenuItem mnemonicParsing="false" text="Close" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
+          <Menu mnemonicParsing="false" text="Characters">
             <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
+              <MenuItem mnemonicParsing="false" onAction="#goToCreateCharacter" text="New Character" />
+                  <MenuItem mnemonicParsing="false" text="New Monster" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
@@ -63,7 +63,10 @@
       </MenuBar>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <children>
-            <ScrollPane prefHeight="375.0" prefWidth="640.0" />
+            <ScrollPane fx:id="campaignScrollPane" prefHeight="375.0" prefWidth="640.0">
+               <content>
+                  <VBox fx:id="campaignsVBox" prefHeight="263.0" prefWidth="560.0" />
+               </content></ScrollPane>
          </children>
     </AnchorPane>
   </children>
