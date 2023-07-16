@@ -65,7 +65,7 @@
          <children>
             <ScrollPane fx:id="campaignScrollPane" prefHeight="375.0" prefWidth="640.0">
                <content>
-                  <VBox fx:id="campaignsVBox" prefHeight="263.0" prefWidth="560.0" />
+                  <VBox fx:id="campaignsVBox" alignment="CENTER" prefHeight="291.0" prefWidth="581.0" />
                </content></ScrollPane>
          </children>
     </AnchorPane>
