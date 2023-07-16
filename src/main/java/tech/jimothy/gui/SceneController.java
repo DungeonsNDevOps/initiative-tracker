@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import tech.jimothy.db.DataShare;
 import tech.jimothy.db.Database;
 import tech.jimothy.db.Table;
 import javafx.scene.Node;
@@ -47,6 +48,16 @@ public class SceneController {
         stage.show();
     }
 
+    public void goToSelectedCampaignPage(int campaignID) throws IOException{
+        DataShare dataShare = DataShare.getInstance();
+        dataShare.setInt(campaignID);
+        stage = (Stage)root.getScene().getWindow();
+        root = FXMLLoader.load(getClass().getResource("/tech/jimothy/fxml/selected-campaign-page.fxml"));
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
     @FXML
     protected void initialize(){
         Database database = new Database("./sqlite/inibase");
@@ -56,7 +67,15 @@ public class SceneController {
         
         for(int i = 0; i < campaignsTable.getSize(); i++){
             Button campaignButton = new Button(campaignsTable.get(i, "name"));
-            campaignButton.setMinWidth(campaignsVBox.getPrefWidth());
+            int campaignID = i+1;
+            campaignButton.setOnAction(actionEvent -> {             
+                try {
+                    goToSelectedCampaignPage(campaignID);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            campaignButton.setMinWidth(campaignsVBox.getPrefWidth()-(campaignsVBox.getPrefWidth()*.2));
             campaignButton.setMinHeight(60);
             campaignsVBox.getChildren().add(campaignButton);
         }
