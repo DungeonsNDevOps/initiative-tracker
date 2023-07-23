@@ -49,6 +49,7 @@
           <Menu mnemonicParsing="false" text="Campaigns">
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#goToCreateCampaign" text="New Campaign" />
+                  <MenuItem mnemonicParsing="false" onAction="#goToCampaignPage" text="Campaigns" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Characters">
@@ -64,7 +65,7 @@
           </Menu>
         </menus>
       </MenuBar>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+    <AnchorPane fx:id="anchorPane" maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <children>
             <ScrollPane fx:id="campaignScrollPane" prefHeight="375.0" prefWidth="640.0">
                <content>
@@ -75,7 +76,7 @@
                </content></ScrollPane>
             <HBox prefHeight="62.0" prefWidth="640.0" AnchorPane.bottomAnchor="0.0">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="62.0" prefWidth="217.0" text="Add Character" />
+                  <Button mnemonicParsing="false" onAction="#addCharacter" prefHeight="62.0" prefWidth="217.0" text="Add Character" />
                   <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="237.0" text="Add Monster" />
                   <Button layoutX="217.0" layoutY="10.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="208.0" text="Start Combat" />
                </children>
