@@ -46,4 +46,5 @@ public class Table {
     public int getSize(){
         return this.table.size();
     }
+
 }

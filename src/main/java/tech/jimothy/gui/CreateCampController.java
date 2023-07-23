@@ -39,7 +39,8 @@ public class CreateCampController {
     public void createCampaign(ActionEvent event) throws SQLException, IOException{
         String campaignName = campaignTextField.getText();
         ObservableList<Integer> characterSelections = characterListView
-                                                    .getSelectionModel().getSelectedIndices();
+                                                    .getSelectionModel()
+                                                    .getSelectedIndices();
         Database database = new Database("./sqlite/inibase"); 
         database.insert("INSERT INTO campaigns(name) VALUES(?)", new String[] {campaignName});
         database.modify("ALTER TABLE characters ADD " + campaignName + " INTEGER");
