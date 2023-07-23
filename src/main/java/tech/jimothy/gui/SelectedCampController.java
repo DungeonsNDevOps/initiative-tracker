@@ -5,16 +5,17 @@ import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import tech.jimothy.db.DataShare;
 import tech.jimothy.db.Database;
 import tech.jimothy.db.Table;
+import tech.jimothy.gui.custom.CharAddWidget;
 
 public class SelectedCampController {
     
@@ -23,10 +24,14 @@ public class SelectedCampController {
     private Scene scene;
     @FXML private Parent root;
     @FXML VBox charactersVBox;
+    @FXML AnchorPane anchorPane;
+
+    private VBox addCharacterWidget;
+    private boolean addCharacterWidgetExists = false;
 
     public void goToCampaignPage(ActionEvent event) throws IOException{
+        stage = (Stage)root.getScene().getWindow();
         root = FXMLLoader.load(getClass().getResource("/tech/jimothy/fxml/campaign-page.fxml"));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
@@ -47,6 +52,27 @@ public class SelectedCampController {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void addCharacter(ActionEvent event){
+        if(!addCharacterWidgetExists){
+            CharAddWidget addCharacterWidget = new CharAddWidget(0);
+            this.addCharacterWidget = addCharacterWidget; 
+
+            AnchorPane.setLeftAnchor(addCharacterWidget, 20.0);
+            AnchorPane.setBottomAnchor(addCharacterWidget, 65.0);
+
+            anchorPane.getChildren().add(addCharacterWidget);
+
+            this.addCharacterWidgetExists = true;           
+        } else{
+            anchorPane.getChildren().remove(this.addCharacterWidget);
+            
+            addCharacterWidgetExists = false;
+        }
+
+
+
     }
 
     @FXML
