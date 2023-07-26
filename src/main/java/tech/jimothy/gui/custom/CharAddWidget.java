@@ -2,6 +2,9 @@ package tech.jimothy.gui.custom;
 
 import java.sql.SQLException;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -22,6 +25,7 @@ public class CharAddWidget extends VBox{
     TextField searchTextField = new TextField();
     ListView<Entity> addCharacterListView = new ListView<>();
     Button addCharacterButton = new Button("Add");
+    ObservableList<Entity> characterList;
     
     public CharAddWidget(int spacing){
         super(spacing);
@@ -33,6 +37,14 @@ public class CharAddWidget extends VBox{
         this.addCharacterButton.setPrefWidth(this.getPrefWidth());
         this.addCharacterListView.getSelectionModel()
                                  .setSelectionMode(SelectionMode.MULTIPLE);
+        //register an event listener with searchTextField's textProperty
+        this.searchTextField.textProperty().addListener(new ChangeListener<String>(){
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                                String oldValue, String newValue){
+                search(newValue);
+            }
+        });
 
         //Add nodes to the instance of this object
         this.getChildren().add(searchTextField);
@@ -52,6 +64,7 @@ public class CharAddWidget extends VBox{
             addCharacterListView.getItems()
                                 .add(characterList.getEntity(i));
         }
+        this.characterList = addCharacterListView.getItems();
     }
 
     public ObservableList<Entity> getSelections(){
@@ -82,7 +95,31 @@ public class CharAddWidget extends VBox{
                 }
             }
         });
+    }
 
+    private void search(String searchValue){
+        System.out.println(searchValue);
+        ObservableList<Entity> newList = FXCollections.observableArrayList();
+        addCharacterListView.setItems(this.characterList);
+        //if searchValue does NOT equal an empty string, then we compare items and repopulate
+        //Otherwise, we just keep the items set to the original items
+        if(!searchValue.equals("")){
+            for(Entity entity : addCharacterListView.getItems()){
+                boolean match = false; // set match as false until otherwise proven
+                for (int i = 0; i < searchValue.length(); i++){
+                    match = (Character.toLowerCase(entity.toString()
+                                                        .charAt(i)) == Character.toLowerCase(searchValue.charAt(i)));
+                    if (!match){
+                        break;
+                    }
+                }
+
+                if (match && !newList.contains(entity)){
+                    newList.add(entity);
+                }
+            }
+            addCharacterListView.setItems(newList);
+        }
         
     }
 }
