@@ -61,17 +61,12 @@ public class CharAddWidget extends VBox{
         return selections;
     }
 
-    /*
-     * Current problem: I need to come up with a way to store meta-data for the characters we list and 
-     * select from the ListView component. Using the index of the ListView item will not work since
-     * we want to implement a search function eventually. 
-     */
     private void setButtonFunction(){
         Database database = new Database("./sqlite/inibase");
         int currentCampaignID = DataShare.getInstance()
                                          .getInt();
         String currentCampaignName = database.query("SELECT * FROM campaigns")
-                                             .get(currentCampaignID, "name");
+                                             .get(currentCampaignID-1, "name");
 
         this.addCharacterButton.setOnAction(event -> {
 
@@ -87,5 +82,7 @@ public class CharAddWidget extends VBox{
                 }
             }
         });
+
+        
     }
 }
