@@ -67,7 +67,7 @@
       </MenuBar>
     <AnchorPane fx:id="anchorPane" maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <children>
-            <ScrollPane fx:id="campaignScrollPane" prefHeight="375.0" prefWidth="640.0">
+            <ScrollPane fx:id="campaignScrollPane" prefHeight="313.0" prefWidth="640.0">
                <content>
                   <VBox fx:id="charactersVBox" alignment="TOP_CENTER" prefHeight="291.0" prefWidth="617.0" spacing="20.0">
                      <padding>
@@ -78,7 +78,7 @@
                <children>
                   <Button mnemonicParsing="false" onAction="#addCharacter" prefHeight="62.0" prefWidth="217.0" text="Add Character" />
                   <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="237.0" text="Add Monster" />
-                  <Button layoutX="217.0" layoutY="10.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="208.0" text="Start Combat" />
+                  <Button layoutX="217.0" layoutY="10.0" mnemonicParsing="false" onAction="#goToPreliminaryCombatPage" prefHeight="62.0" prefWidth="208.0" text="Start Combat" />
                </children>
             </HBox>
          </children>
