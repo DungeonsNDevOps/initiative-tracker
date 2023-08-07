@@ -26,9 +26,14 @@ public class CharAddWidget extends VBox{
     ListView<Entity> addCharacterListView = new ListView<>();
     Button addCharacterButton = new Button("Add");
     ObservableList<Entity> characterList;
+    VBox charactersVBox;
     
-    public CharAddWidget(int spacing){
+    public CharAddWidget(VBox charactersBox, int spacing){
+        //call the super constructor method
         super(spacing);
+
+        //set the reference to the VBox that characters are displayed in
+        this.charactersVBox = charactersBox;
 
         //Configuration
         this.setPrefHeight(250);
@@ -90,6 +95,12 @@ public class CharAddWidget extends VBox{
                     database.modify("UPDATE characters SET " + 
                                     currentCampaignName + " = 1 WHERE id = " + 
                                     character.getID());
+                    //add new characterwidget to charactersVBox
+                    this.charactersVBox.getChildren().add(
+                        new KillableCharacterWidget(
+                                                    character,
+                                                    10, 
+                                                    this.charactersVBox.getPrefWidth()*0.8));
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
