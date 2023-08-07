@@ -16,6 +16,7 @@ import tech.jimothy.db.DataShare;
 import tech.jimothy.db.Database;
 import tech.jimothy.db.Table;
 import tech.jimothy.gui.custom.CharAddWidget;
+import tech.jimothy.gui.custom.KillableCharacterWidget;
 
 public class SelectedCampController {
     
@@ -54,9 +55,17 @@ public class SelectedCampController {
         stage.show();
     }
 
+    public void goToPreliminaryCombatPage() throws IOException{
+        stage = (Stage)root.getScene().getWindow();
+        root = FXMLLoader.load(getClass().getResource("/tech/jimothy/fxml/preliminary-combat-page.fxml"));
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
     public void addCharacter(ActionEvent event){
         if(!addCharacterWidgetExists){
-            CharAddWidget addCharacterWidget = new CharAddWidget(0);
+            CharAddWidget addCharacterWidget = new CharAddWidget(this.charactersVBox, 0);
             this.addCharacterWidget = addCharacterWidget; 
 
             AnchorPane.setLeftAnchor(addCharacterWidget, 20.0);
@@ -91,16 +100,14 @@ public class SelectedCampController {
         
         for (int i = 0; i < charactersTable.getSize(); i++){
             String characterName = charactersTable.get(i, "name");
-
-            HBox characterBox = new HBox(20.0);
-            characterBox.setStyle("-fx-border-style: solid;" + 
-                                    "-fx-border-width: 1px;");
-            characterBox.setMaxWidth(charactersVBox.getPrefWidth()*.8);
-            Label characterNameLabel = new Label(characterName);
-
-            characterBox.getChildren().add(characterNameLabel);
-
-            this.charactersVBox.getChildren().add(characterBox);
+            String characterBonus = charactersTable.get(i, "bonus");
+            String characterID = charactersTable.get(i, "id");
+            KillableCharacterWidget character = new KillableCharacterWidget(20, 
+                                                            charactersVBox.getPrefWidth()*.8, 
+                                                            characterName, characterBonus,
+                                                            characterID
+                                                            );
+            this.charactersVBox.getChildren().add(character);
         }
         database.close();
     }
