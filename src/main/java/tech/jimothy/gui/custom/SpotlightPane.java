@@ -19,20 +19,35 @@ public class SpotlightPane extends Pane{
     private double gap; 
     private double widthFactor;
 
-    /**The index of the child that's in the spotlight */
-    private int spotlightIndex;
+    /**The child that's in the spotlight */
+    private Node spotlightChild;
+    //The index of the child currntly within the spotlight. 
+    private int spotlightIndex = 0;
+    //this X coordinate of the static spotlight position
+    private double focusPosX;
+    //the Y coordinate of the static spotlight position
+    private double focusPosY;
+
+
     
     public SpotlightPane(double gap, double widthFactor){
         super();
         this.gap = gap;
         this.widthFactor = widthFactor;
         this.setStyle("-fx-border-style: dotted; -fx-border-width: 2px;");
+        //ensure that when the  user clicks on this node, input focus
+        //is set for this node. This is important for future
+        //input event handling within this node.
+        this.setOnMousePressed(event -> {
+            this.requestFocus();
+        });
 
-        setOnKeyPressed(event -> {
+        //
+        this.setOnKeyPressed(event -> {
             if(event.getCode() == KeyCode.DOWN){
-                System.out.println("Down was pressed");
-            } else{
-                System.out.println("You're dumb");
+                this.shiftChildrenDown();
+            } else if (event.getCode() == KeyCode.UP){
+                this.shiftChildrenUp();
             }
         });
 
@@ -46,15 +61,51 @@ public class SpotlightPane extends Pane{
 
         double childWidth = this.getMinWidth()*this.widthFactor;
 
-        double initialXPos = (this.getMinWidth()/2.0) - (childWidth/2);
-        double initialYPos = this.getMinHeight()/2.0;
+        this.focusPosX = (this.getMinWidth()/2.0) - (childWidth/2);
+        double offsetY = this.focusPosY = this.getMinHeight()/2.0;
 
+        int childIndex = 0;
         for (Node child : children){
             if(child instanceof Region){
+                if(childIndex == 0){
+                    this.spotlightChild = child;
+                }
                 ((Region)child).setMinWidth(childWidth);
-                child.relocate(initialXPos, initialYPos);
-                initialYPos += gap;                
+                child.relocate(this.focusPosX, offsetY);
+                offsetY += gap;                
             }
+            childIndex += 1; 
+        }
+    }
+
+    private void shiftChildrenDown(){
+        ObservableList<Node> children = this.getChildren();
+
+        //Check to make sure we won't go out of bounds
+        if (spotlightIndex + 1 < children.size()){
+            spotlightIndex += 1;
+            this.spotlightChild = children.get(spotlightIndex);
+
+            for(int i = 0; i < children.size(); i++){
+                Node child = children.get(i);
+                if (i < spotlightIndex){
+                    //TO-DO: create a convenient way of getting the children's height. After that, 
+                    //calculate how far up or down the children will be from the spotlight pos
+                    //child.relocate(this.focusPosX, this.focusPosY - (this.gap+(Region)))
+                }
+            }
+            
+        }
+    }
+
+    private void shiftChildrenUp(){
+        ObservableList<Node> children = this.getChildren();
+
+        //Check to make sure we won't go out of bounds
+        if (spotlightIndex > 0){
+            spotlightIndex -= 1;
+            this.spotlightChild = children.get(spotlightIndex); 
         }
     }
 }
+
