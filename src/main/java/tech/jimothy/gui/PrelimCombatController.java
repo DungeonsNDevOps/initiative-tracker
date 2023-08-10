@@ -13,6 +13,7 @@ public class PrelimCombatController {
     @FXML
     protected void initialize(){
         SpotlightPane spotlightTest = new SpotlightPane(30.0, 0.2);
+        spotlightTest.requestFocus();
         spotlightTest.setMaxWidth(root.getPrefWidth());
         spotlightTest.setMaxHeight(root.getPrefHeight());
         spotlightTest.setMinWidth(root.getPrefWidth());
