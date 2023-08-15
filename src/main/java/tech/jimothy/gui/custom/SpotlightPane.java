@@ -29,6 +29,8 @@ public class SpotlightPane extends Pane{
     private double focusPosY;
 
 
+
+
     
     public SpotlightPane(double gap, double widthFactor){
         super();
@@ -89,10 +91,51 @@ public class SpotlightPane extends Pane{
             for(int i = 0; i < children.size(); i++){
                 Node child = children.get(i);
                 if (i < spotlightIndex){
-                    //TO-DO: create a convenient way of getting the children's height. After that, 
-                    //calculate how far up or down the children will be from the spotlight pos
-                    //child.relocate(this.focusPosX, this.focusPosY - (this.gap+(Region)))
+
+                    //The distance between the current child per iteration and the spotlight position
+                    double distance = 0;
+                    //iterate from the current child to the spotlight index, counting the distance
+                    //this is to get the current distance of the current child away from the 
+                    //spotlight position
+                    for(int ii = i; ii < this.spotlightIndex; ii++){
+                        /*check to make sure child is an instance of region
+                         * so we can cast it to region and get it's height for
+                         * calculating distance.
+                         */
+                        if (children.get(ii) instanceof Region){
+                           distance += ((Region)children.get(ii)).getHeight() + this.gap;
+                        }
+                        
+                    }
+                    if (child instanceof Region){
+                        ((Region)child).relocate(this.focusPosX, this.focusPosY-distance);
+                        System.out.println("/");
+                    }
+
+                }else if (i == spotlightIndex){
+                    if(child instanceof Region){
+                        ((Region)child).relocate(this.focusPosX, this.focusPosY);
+                        System.out.println("*");
+                    }
+                } else{
+                    //The distance between the current child per iteration and the spotlight position
+                    double distance = 0;
+                    /*Iterate from the child at the spotlightIndex through to the 
+                     * current child per iteration, counting the distance.
+                     */
+                    for(int ii = spotlightIndex; ii < i; ii++){
+                        if(children.get(ii) instanceof Region){
+                            distance += ((Region)child).getHeight() + this.gap;
+
+                        }
+                    }
+
+                    if(child instanceof Region){
+                        ((Region)child).relocate(this.focusPosX, this.focusPosY + distance);
+                        System.out.println("/");
+                    }
                 }
+
             }
             
         }
