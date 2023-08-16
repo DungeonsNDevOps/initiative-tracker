@@ -96,9 +96,9 @@ public class SpotlightPane extends Pane{
                 }
                 childIndex += 1;
             }
-        layoutChildrenCount += 1;
+            layoutChildrenCount += 1;
+        }
     }
-}
     /**
      * Method shifts children up, placing a the next child in line in the spotlight position
      */
@@ -157,7 +157,6 @@ public class SpotlightPane extends Pane{
                     child.relocate(this.spotlightPosX, this.spotlightPosY-distance);
                     child.setScaleX(1);
                     child.setScaleY(1);
-                    System.out.println("/");
 
                 /*
                  * else, if the index of the current child is the index of the child that 
@@ -165,10 +164,11 @@ public class SpotlightPane extends Pane{
                  * and scale the child by a factor of 2 (200%)
                  */
                 }else if (i == spotlightIndex){ 
+
                     child.relocate(this.spotlightPosX, this.spotlightPosY);
                     child.setScaleX(2);
                     child.setScaleY(2);
-                    System.out.println("*");
+
 
                 /*
                  * Else (if the index of the current child is greater than the index
@@ -192,7 +192,6 @@ public class SpotlightPane extends Pane{
                     child.relocate(this.spotlightPosX, this.spotlightPosY + distance);
                     child.setScaleX(1);
                     child.setScaleY(1);
-                    System.out.println("/");
 
                 }
             }    
@@ -232,14 +231,14 @@ public class SpotlightPane extends Pane{
                     child.relocate(this.spotlightPosX, this.spotlightPosY-distance);
                     child.setScaleX(1);
                     child.setScaleY(1);
-                    System.out.println("/");
 
 
                 }else if (i == spotlightIndex){
+
                     child.relocate(this.spotlightPosX, this.spotlightPosY);
                     child.setScaleX(2);
                     child.setScaleY(2);
-                    System.out.println("*");
+
                 } else{
                     //The distance between the current child per iteration and the spotlight position
                     double distance = 0;
@@ -256,11 +255,14 @@ public class SpotlightPane extends Pane{
                     child.relocate(this.spotlightPosX, this.spotlightPosY + distance);
                     child.setScaleX(1);
                     child.setScaleY(1);
-                    System.out.println("/");
 
                 }
             }    
         }
+    }
+
+    public int getSpotlightIndex(){
+        return this.spotlightIndex;
     }
 }
 
