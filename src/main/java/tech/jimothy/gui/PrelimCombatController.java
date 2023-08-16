@@ -1,17 +1,23 @@
 package tech.jimothy.gui;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
-import tech.jimothy.gui.custom.SpotlightPane;
 import tech.jimothy.db.DataShare;
 import tech.jimothy.db.Database;
 import tech.jimothy.db.Table;
 import tech.jimothy.gui.custom.CharacterWidget;
+import tech.jimothy.gui.custom.SpotlightPane;
 
 public class PrelimCombatController {
 
     @FXML Pane root;
+    @FXML Button finishButton;
+    @FXML Button backButton;
 
     @FXML
     protected void initialize(){
@@ -20,6 +26,7 @@ public class PrelimCombatController {
         spotlightTest.setMaxHeight(root.getPrefHeight());
         spotlightTest.setMinWidth(root.getPrefWidth());
         spotlightTest.setMinHeight(root.getPrefHeight());
+
 
         Database database = new Database("./sqlite/inibase");
         DataShare dataShare = DataShare.getInstance();
@@ -30,14 +37,42 @@ public class PrelimCombatController {
                                                 campaignName + " = 1");
         
         for (int i = 0; i < charactersTable.getSize(); i++){
-            spotlightTest.getChildren().add(new CharacterWidget(
-                                                                0,
+            CharacterWidget character = new CharacterWidget(   0,
                                                                 20,
                                                                 charactersTable.get(i, "name"),
                                                                 charactersTable.get(i, "bonus"),
                                                                 charactersTable.get(i, "id")
-            ));
+            );
+            spotlightTest.getChildren().add(character);
+
+            TextField bonusTextField = new TextField();
+            Label bonusLabel = new Label('+' + charactersTable.get(i, "bonus"));
+            
+            character.getChildren().add(bonusTextField);
+            character.getChildren().add(bonusLabel);
+            
+            bonusTextField.setPrefWidth(35.0);
+
+            //* Sets the onkeypressed event handle function to the handle function of the */
+            //* onkeypressed event handle function of SpotlightPane */
+            //* This allows for SpotlightPane to shift children even when the input focus is currently */
+            //* set on the particular textfield */
+            //TODO: Review lambda expressions and how they work in the context of javafx events
+            bonusTextField.setOnKeyPressed(event -> {
+                bonusTextField.getParent().getParent().getOnKeyPressed().handle(event);
+                spotlightTest.getChildren().get(spotlightTest.getSpotlightIndex()).requestFocus();
+            });
         }
         root.getChildren().add(spotlightTest);
+        //*Send the spotlightpane to the back of the children list so that buttons are usable */
+        spotlightTest.toBack();
+    }
+
+    public void finish(ActionEvent event){
+        ;
+    }
+
+    public void back(ActionEvent event){
+        ;
     }
 }
