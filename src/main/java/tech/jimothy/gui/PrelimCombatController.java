@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import tech.jimothy.db.DataShare;
 import tech.jimothy.db.Database;
@@ -60,10 +59,16 @@ public class PrelimCombatController {
             //TODO: Review lambda expressions and how they work in the context of javafx events
             bonusTextField.setOnKeyPressed(event -> {
                 bonusTextField.getParent().getParent().getOnKeyPressed().handle(event);
-                spotlightTest.getChildren().get(spotlightTest.getSpotlightIndex()).requestFocus();
+                ((CharacterWidget)spotlightTest.getChildren() //get the children in the spotlightpane
+                                               .get(spotlightTest.getSpotlightIndex())) //get the node at the spotlight index and cast it to CharacterWidget
+                                               .getChildren() //get the children from the children of the characterwidget
+                                               .get(2) // get the child at the second index, which is the text field
+                                               .requestFocus(); // request that the text field get the input focus
             });
         }
+
         root.getChildren().add(spotlightTest);
+
         //*Send the spotlightpane to the back of the children list so that buttons are usable */
         spotlightTest.toBack();
     }
