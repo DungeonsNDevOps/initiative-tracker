@@ -17,11 +17,10 @@ public class KillableCharacterWidget extends CharacterWidget {
     
     public KillableCharacterWidget( 
                            int spacing, 
-                           double width, 
                            String name, 
                            String bonus, 
                            String ID){
-        super(spacing, width, name, bonus, ID);
+        super(spacing, name, bonus, ID);
         //Create vbox for buttons
         VBox buttonBox = new VBox(10);
 
@@ -35,10 +34,9 @@ public class KillableCharacterWidget extends CharacterWidget {
 
     public KillableCharacterWidget(
                            Entity soul, 
-                           int spacing, 
-                           double width){
+                           int spacing){
                             
-        super(soul, spacing, width); 
+        super(soul, spacing); 
         //Create vbox for buttons
         VBox buttonBox = new VBox(10);
 

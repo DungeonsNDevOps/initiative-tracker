@@ -20,13 +20,15 @@ public class CharacterWidget extends HBox{
     private String id;
     /**The character's initiative bonus */
     private String bonus; 
+    /**The character's initiative */
+    private int initiative;
 
     /**
      * Constructor takes an Entity object and gets the character's data from it. 
      * @param soul The essence of this class; Rather, all the important data is
      * extracted from this object. 
      */
-    public CharacterWidget(Entity soul, int spacing, double width){
+    public CharacterWidget(Entity soul, int spacing){
         super(spacing);
 
         this.name = soul.toString();
@@ -37,7 +39,6 @@ public class CharacterWidget extends HBox{
         this.setStyle("-fx-background-color: #AEB6B7;"+
                       "-fx-border-radius: 10 10 10 10;"
                       );
-        this.setMinWidth(width);
 
         /*Make Children */
         Label characterNameLabel = new Label(name);
@@ -52,7 +53,6 @@ public class CharacterWidget extends HBox{
     }
 
     public CharacterWidget(int spacing, 
-                           double width, 
                            String name, 
                            String bonus, 
                            String id){
@@ -66,7 +66,6 @@ public class CharacterWidget extends HBox{
         this.setStyle("-fx-background-color: #AEB6B7;"+
                       "-fx-border-radius: 10 10 10 10;"
                       );
-        this.setMinWidth(width);
 
         /*Make Children */
         Label characterNameLabel = new Label(name);
@@ -98,5 +97,13 @@ public class CharacterWidget extends HBox{
 
     public String getBonus(){
         return this.bonus;
+    }
+
+    public int getInitiative(){
+        return this.initiative;
+    }
+
+    public void setInitiative(int initiative){
+        this.initiative = initiative + Integer.valueOf(this.bonus);
     }
 }

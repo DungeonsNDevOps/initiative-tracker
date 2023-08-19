@@ -99,8 +99,7 @@ public class CharAddWidget extends VBox{
                     this.charactersVBox.getChildren().add(
                         new KillableCharacterWidget(
                                                     character,
-                                                    10, 
-                                                    this.charactersVBox.getPrefWidth()*0.8));
+                                                    10));
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

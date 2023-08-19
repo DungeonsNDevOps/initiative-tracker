@@ -103,7 +103,6 @@ public class SelectedCampController {
             String characterBonus = charactersTable.get(i, "bonus");
             String characterID = charactersTable.get(i, "id");
             KillableCharacterWidget character = new KillableCharacterWidget(20, 
-                                                            charactersVBox.getPrefWidth()*.8, 
                                                             characterName, characterBonus,
                                                             characterID
                                                             );
