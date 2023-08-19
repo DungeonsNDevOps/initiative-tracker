@@ -1,5 +1,7 @@
 package tech.jimothy.db;
 
+import java.util.ArrayList;
+
 /**
  * DataShare is an object that utilizes the Singleton pattern. It is intended to allow 
  * JavaFX controllers to share data. It allows for the storage of three data types.  
@@ -9,6 +11,8 @@ public class DataShare {
     private String str;
     private Double dbl;
     private int num;
+
+    private ArrayList<Object> array;
 
     private final static DataShare INSTANCE = new DataShare();
 
@@ -40,6 +44,14 @@ public class DataShare {
 
     public void setInt(int num){
         this.num = num;
+    }
+
+    public void setArray(ArrayList<Object> array){
+        this.array = array;
+    }
+
+    public ArrayList<Object> getArray(){
+        return this.array;
     }
 
 }
