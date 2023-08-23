@@ -6,6 +6,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
@@ -17,6 +18,8 @@ import tech.jimothy.db.Table;
 import tech.jimothy.utils.Entity;
 import tech.jimothy.utils.EntityList;
 
+
+//TODO: Consider refactoring code to no longer use 'Entity' class as character representation in ViewLists
 /**
  * CharAddWidget is a custom JavaFX component that 
  */
@@ -78,7 +81,7 @@ public class CharAddWidget extends VBox{
                                                 .getSelectedItems();
         return selections;
     }
-
+    
     private void setButtonFunction(){
         Database database = new Database("./sqlite/inibase");
         int currentCampaignID = DataShare.getInstance()
@@ -89,17 +92,29 @@ public class CharAddWidget extends VBox{
         this.addCharacterButton.setOnAction(event -> {
 
             for(Entity character : getSelections()){
-                System.out.println(character.getID());
+                boolean alreadyAdded = false;
+                //System.out.println(character.getID());
                 try {
-                    System.out.println("Updating database...");
+                    //System.out.println("Updating database...");
                     database.modify("UPDATE characters SET " + 
                                     currentCampaignName + " = 1 WHERE id = " + 
                                     character.getID());
-                    //add new characterwidget to charactersVBox
-                    this.charactersVBox.getChildren().add(
-                        new KillableCharacterWidget(
-                                                    character,
-                                                    10));
+                    for(Node characterWidget : this.charactersVBox.getChildren()){
+                        if (Integer.valueOf(((CharacterWidget)characterWidget).getID()) == character.getID()){
+                            alreadyAdded = true;
+                        }
+                    }
+
+                    if(!alreadyAdded){
+                        //add new characterwidget to charactersVBox
+                        this.charactersVBox.getChildren().add(
+                            new KillableCharacterWidget(
+                                                        character,
+                                                        10));
+                    } else{
+                        ; //? Add warning message animation thing here for when user adds a dupe character maybe?
+                    }
+                    
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
