@@ -7,6 +7,7 @@ import java.util.HashMap;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
@@ -19,6 +20,8 @@ public class CreateCampController {
     @FXML private ListView<String> characterListView;
     /**Injectable TextField for the campaign name */
     @FXML private TextField campaignTextField;
+    /**Injectable warning label */
+    @FXML private Label warningLabel;
 
     /**
      * Method runs when the FXML for this controller is built with FXMLLoader
@@ -42,14 +45,18 @@ public class CreateCampController {
                                                     .getSelectionModel()
                                                     .getSelectedIndices();
         Database database = new Database("./sqlite/inibase"); 
-        database.insert("INSERT INTO campaigns(name) VALUES(?)", new String[] {campaignName});
-        database.modify("ALTER TABLE characters ADD " + campaignName + " INTEGER");
-        for(int characterIndex : characterSelections){
-            System.out.println(characterIndex);
-            database.modify("UPDATE characters SET " + campaignName + " = 1" + 
-                            " WHERE id = " + (characterIndex+1));
+        try{
+            database.insert("INSERT INTO campaigns(name) VALUES(?)", new String[] {campaignName});
+            database.modify("ALTER TABLE characters ADD " + campaignName + " INTEGER");
+            for(int characterIndex : characterSelections){
+                System.out.println(characterIndex);
+                database.modify("UPDATE characters SET " + campaignName + " = 1" + 
+                                " WHERE id = " + (characterIndex+1));
+            }
+            new SceneController().goToCampaignPage(event);
+            database.close();
+        } catch(SQLException e){
+            warningLabel.setVisible(true);
         }
-        new SceneController().goToCampaignPage(event);
-        database.close();
     }
 }
