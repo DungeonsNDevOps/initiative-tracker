@@ -23,6 +23,30 @@ public class CharacterWidget extends HBox{
     /**The character's initiative */
     private int initiative;
 
+    public CharacterWidget(){
+
+        this.name = null;
+        this.id = null;
+        this.bonus = null;
+
+        //Configuration
+        this.setStyle("-fx-background-color: #AEB6B7;"+
+                      "-fx-border-radius: 10 10 10 10;"
+                      );
+
+        /*Make Children */
+        Label characterNameLabel = new Label(name);
+
+        //Create blank in between label and button
+        Region blankSpace = new Region();
+        HBox.setHgrow(blankSpace, Priority.ALWAYS);
+
+        this.getChildren().add(characterNameLabel);
+        this.getChildren().add(blankSpace);
+
+    }
+
+
     /**
      * Constructor takes an Entity object and gets the character's data from it. 
      * @param soul The essence of this class; Rather, all the important data is
