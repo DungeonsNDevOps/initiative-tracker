@@ -1,10 +1,13 @@
 package tech.jimothy.utils;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import tech.jimothy.gui.custom.CharacterWidget;
 
-public class SortTools {
+public class CharacterSortTools {
     
     /**
      * Method sorts the characters based on their initiative in descending order. It uses the 
@@ -33,5 +36,33 @@ public class SortTools {
             array.set(j+1, current);
         }
         return array;
+    }
+
+    public static CharacterWidget greatestInitiative(ObservableList<Node> observableList){
+        CharacterWidget greatestInitiative = new CharacterWidget(); 
+
+        if(observableList.get(0) instanceof CharacterWidget){
+            greatestInitiative = (CharacterWidget)observableList.get(0);
+            for(int i = 1; i < observableList.size(); i++){
+                CharacterWidget character = (CharacterWidget)observableList.get(i);
+                if (character.getInitiative() > greatestInitiative.getInitiative()){
+                    greatestInitiative = character;
+                }
+            }  
+        }
+
+        return greatestInitiative;
+    }
+
+    public static CharacterWidget greatestInitiative(ArrayList<CharacterWidget> characters){
+        CharacterWidget greatestInitiative = characters.get(0);
+        for(int i = 1; i < characters.size(); i++){
+            CharacterWidget character = (CharacterWidget)characters.get(i);
+            if (character.getInitiative() > greatestInitiative.getInitiative()){
+                greatestInitiative = character;
+            }
+        }  
+
+        return greatestInitiative;
     }
 }
