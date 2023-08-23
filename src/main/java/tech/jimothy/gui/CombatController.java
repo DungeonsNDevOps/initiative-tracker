@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 import tech.jimothy.db.DataShare;
 import tech.jimothy.gui.custom.CharacterWidget;
 import tech.jimothy.gui.custom.KillableCharacterWidget;
-import tech.jimothy.utils.SortTools;
+import tech.jimothy.utils.CharacterSortTools;
 
 import java.util.ArrayList;
 
@@ -27,8 +27,8 @@ public class CombatController {
     int time = 0;
     //the amount of turns that have taken place
     int turns = 0;
-    //the first character in turn order
-    Node firstCharacter;
+    //character with the current largest initiative
+    CharacterWidget topOfList;
 
     @FXML
     protected void initialize(){
@@ -48,25 +48,26 @@ public class CombatController {
             }
         }
         //sort the characters in descending order based on their initiative
-        ArrayList<CharacterWidget> sortedCharacters = SortTools.charSortDesc(characters);
+        ArrayList<CharacterWidget> sortedCharacters = CharacterSortTools.charSortDesc(characters);
 
         //Add characters to their VBox container
         for (CharacterWidget character : sortedCharacters){
             character.getChildren().add(new Label("Init: " + String.valueOf(character.getInitiative())));
             charactersContainer.getChildren().add(character);
         }
-
-        this.firstCharacter = charactersContainer.getChildren().get(0);
     }
 
     public void cycle(ActionEvent event){
         ObservableList<Node> characters = charactersContainer.getChildren();
         Node first = characters.get(0);
 
+        //character with greatest initiative will be the marker for each new round
+        topOfList = CharacterSortTools.greatestInitiative(characters);
+
         characters.remove(0);
         characters.add(first);
 
-        if (characters.indexOf(this.firstCharacter) == 0){
+        if (characters.indexOf(topOfList) == 0){
             this.rounds += 1;
 
             String[] temp = roundsLabel.getText().split(" ");
