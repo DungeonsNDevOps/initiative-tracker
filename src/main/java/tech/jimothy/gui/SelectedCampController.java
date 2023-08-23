@@ -79,9 +79,6 @@ public class SelectedCampController {
             
             addCharacterWidgetExists = false;
         }
-
-
-
     }
 
     @FXML
