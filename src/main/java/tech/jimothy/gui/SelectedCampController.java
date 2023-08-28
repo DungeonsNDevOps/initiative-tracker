@@ -89,7 +89,7 @@ public class SelectedCampController {
         Database database = new Database("./sqlite/inibase");
         DataShare dataShare = DataShare.getInstance();
         int campaignID = dataShare.getInt();
-        System.out.println(campaignID);
+        //System.out.println(campaignID);
         Table campaignsTable = database.query("SELECT * FROM campaigns");
         String campaignName = campaignsTable.get(campaignID - 1, "name");
         Table charactersTable = database.query("SELECT * FROM characters WHERE " +
