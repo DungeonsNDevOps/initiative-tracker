@@ -38,7 +38,7 @@ public class CreateCampController {
         }
         database.close();
     }
-
+    //TODO: Rows are still being added despite SQL duplicate error. Implement a better way to validate non-dupe campaigns.
     public void createCampaign(ActionEvent event) throws SQLException, IOException{
         String campaignName = campaignTextField.getText();
         ObservableList<Integer> characterSelections = characterListView
