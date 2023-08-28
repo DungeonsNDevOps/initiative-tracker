@@ -109,7 +109,6 @@ public class Database {
 
         String [] sqlStatements = sql.split(";");
 
-        System.out.println(sql);
         try{
             if(dbFile.length() == 0){
                 for(String stmt : sqlStatements){
