@@ -9,8 +9,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import tech.jimothy.db.DataShare;
 import tech.jimothy.gui.custom.CharacterWidget;
-import tech.jimothy.gui.custom.KillableCharacterWidget;
+import tech.jimothy.gui.custom.EffectWidget;
 import tech.jimothy.utils.CharacterSortTools;
+import tech.jimothy.utils.Effect;
 
 import java.util.ArrayList;
 
@@ -20,6 +21,7 @@ public class CombatController {
     @FXML VBox charactersContainer;
     @FXML Label roundsLabel;
     @FXML Label timeLabel;
+    @FXML private VBox effectsView;
 
     //the amount of rounds that have taken place
     int rounds = 0;
@@ -29,6 +31,8 @@ public class CombatController {
     int turns = 0;
     //character with the current largest initiative
     CharacterWidget topOfList;
+    //Character that is being focused on for the purpose of viewing effects/properties
+    CharacterWidget focusedCharacter;
 
     @FXML
     protected void initialize(){
@@ -52,9 +56,26 @@ public class CombatController {
 
         //Add characters to their VBox container
         for (CharacterWidget character : sortedCharacters){
+            //set on click to populate effects and properties view
+            character.setOnMouseClicked(event -> {
+                //if a character has been selected in the past, reset its style.
+                if(this.focusedCharacter != null){
+                    //? Find a way to not append the CSS?
+                    this.focusedCharacter.setStyle(character.getStyle() + "; -fx-border-width: 1px; -fx-border-color: Black;");
+                }
+                //highlight the border of the character and set it as the focused character
+                character.setStyle(character.getStyle() + "; -fx-border-width: 3px; -fx-border-color: Blue;");
+                this.focusedCharacter = character;
+
+                //populate the views
+                populateEffectsView();
+                populatePropertiesView();
+            });
             character.getChildren().add(new Label("Init: " + String.valueOf(character.getInitiative())));
             charactersContainer.getChildren().add(character);
         }
+
+
     }
 
     public void cycle(ActionEvent event){
@@ -90,6 +111,18 @@ public class CombatController {
         } else{
             this.timeLabel.setText(temp[0] + " " + String.valueOf(this.time/60) + " m " + String.valueOf(this.time % 60) + " s");
         }
+    }
+
+    private void populateEffectsView(){
+        ArrayList<Effect> charEffects = this.focusedCharacter.getEffects();
+
+        for (Effect effect : charEffects){
+            this.effectsView.getChildren().add(new EffectWidget(effect, this.focusedCharacter));
+        }
+    }
+
+    private void populatePropertiesView(){
+        ;
     }
 }
  
