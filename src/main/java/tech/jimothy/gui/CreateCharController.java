@@ -23,7 +23,7 @@ public class CreateCharController {
 
         if (Integers.isInteger(characterBonus)){
             database.insert("INSERT INTO characters(name, bonus) VALUES(?, ?)", new String[] {characterName, characterBonus});
-            new SceneController().goToCampaignPage(event);
+            new CampaignController().goToCampaignPage(event);
         } else{
             bonusWarningMessage.setText("Bonus must be an integer!");
         }
