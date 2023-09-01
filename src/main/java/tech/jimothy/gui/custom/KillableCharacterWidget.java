@@ -18,8 +18,8 @@ public class KillableCharacterWidget extends CharacterWidget {
     public KillableCharacterWidget( 
                            int spacing, 
                            String name, 
-                           String bonus, 
-                           String ID){
+                           int bonus, 
+                           int ID){
         super(spacing, name, bonus, ID);
         //Create vbox for buttons
         VBox buttonBox = new VBox(10);
