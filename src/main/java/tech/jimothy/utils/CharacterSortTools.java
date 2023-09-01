@@ -1,7 +1,6 @@
 package tech.jimothy.utils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
