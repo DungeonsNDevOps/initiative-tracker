@@ -50,8 +50,8 @@ public class PrelimCombatController {
         for (int i = 0; i < charactersTable.getSize(); i++){
             CharacterWidget character = new CharacterWidget(   0,
                                                                 charactersTable.get(i, "name"),
-                                                                charactersTable.get(i, "bonus"),
-                                                                charactersTable.get(i, "id")
+                                                                Integer.valueOf(charactersTable.get(i, "bonus")),
+                                                                Integer.valueOf(charactersTable.get(i, "id"))
             );
             spotlightPane.getChildren().add(character);
 
