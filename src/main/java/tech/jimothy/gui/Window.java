@@ -2,16 +2,12 @@ package tech.jimothy.gui;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import tech.jimothy.db.Database;
-import tech.jimothy.db.Table;
 
 public class Window extends Application{
 
