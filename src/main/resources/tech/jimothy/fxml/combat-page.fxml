@@ -118,7 +118,7 @@
                         </Label>
                         <ScrollPane prefHeight="200.0" prefWidth="200.0">
                            <content>
-                              <VBox prefHeight="154.0" prefWidth="157.0" />
+                              <VBox fx:id="effectsView" prefHeight="154.0" prefWidth="157.0" />
                            </content>
                         </ScrollPane>
                      </children>
