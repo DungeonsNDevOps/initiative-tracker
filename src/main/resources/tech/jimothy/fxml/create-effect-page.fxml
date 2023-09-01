@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="755.0" prefWidth="694.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.jimothy.gui.CreateEffectController">
+   <children>
+      <Label layoutX="247.0" layoutY="39.0" text="Create Effect">
+         <font>
+            <Font name="Book Antiqua" size="36.0" />
+         </font>
+      </Label>
+      <Button layoutX="302.0" layoutY="703.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="101.0" text="Create" />
+      <TextField fx:id="nameTextField" layoutX="276.0" layoutY="184.0" />
+      <Label layoutX="319.0" layoutY="137.0" text="Name">
+         <font>
+            <Font name="Book Antiqua" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="291.0" layoutY="275.0" text="Description">
+         <font>
+            <Font name="Book Antiqua" size="24.0" />
+         </font>
+      </Label>
+      <TextArea fx:id="descTextArea" layoutX="180.0" layoutY="322.0" prefHeight="200.0" prefWidth="345.0" />
+      <Label layoutX="303.0" layoutY="565.0" text="Duration">
+         <font>
+            <Font name="Book Antiqua" size="24.0" />
+         </font>
+      </Label>
+      <TextField fx:id="durationTextFIeld" layoutX="276.0" layoutY="612.0" />
+   </children>
+</AnchorPane>
