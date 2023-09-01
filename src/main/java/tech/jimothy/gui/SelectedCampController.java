@@ -7,9 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import tech.jimothy.db.DataShare;
@@ -97,8 +95,8 @@ public class SelectedCampController {
         
         for (int i = 0; i < charactersTable.getSize(); i++){
             String characterName = charactersTable.get(i, "name");
-            String characterBonus = charactersTable.get(i, "bonus");
-            String characterID = charactersTable.get(i, "id");
+            int characterBonus = Integer.valueOf(charactersTable.get(i, "bonus"));
+            int characterID = Integer.valueOf(charactersTable.get(i, "id"));
             KillableCharacterWidget character = new KillableCharacterWidget(20, 
                                                             characterName, characterBonus,
                                                             characterID
