@@ -53,7 +53,7 @@ public class CreateCampController {
                 database.modify("UPDATE characters SET " + campaignName + " = 1" + 
                                 " WHERE id = " + (characterIndex+1));
             }
-            new SceneController().goToCampaignPage(event);
+            new CampaignController().goToCampaignPage(event);
             database.close();
         } catch(SQLException e){
             warningLabel.setVisible(true);
