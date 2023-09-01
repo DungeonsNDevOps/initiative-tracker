@@ -1,15 +1,21 @@
 package tech.jimothy.gui.custom;
 
+import java.util.ArrayList;
+
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import tech.jimothy.utils.Effect;
 import tech.jimothy.utils.Entity;
 
 /**
  * A javafx component or 'widget' that is for displaying character/monster data.
  * This is the base for all other character widget classes.
+ * CharacterWidget can be thought of as a complete representation of a character/monster.
+ * It contains not only the code necessary to display information within the GUI but data
+ * about the character as well. 
  */
 
 public class CharacterWidget extends HBox{
@@ -17,17 +23,21 @@ public class CharacterWidget extends HBox{
     /**Name of the character */
     private String name;
     /**The character's unique ID */
-    private String id;
+    private int id;
     /**The character's initiative bonus */
-    private String bonus; 
+    private int bonus; 
     /**The character's initiative */
     private int initiative;
+    /**The effects the character is currently under */
+    private ArrayList<Effect> effects = new ArrayList<>();
+    /**The character's effect immunities */
+    private ArrayList<Effect> immunities = new ArrayList<>();
 
     public CharacterWidget(){
 
         this.name = null;
-        this.id = null;
-        this.bonus = null;
+        this.id = 0;
+        this.bonus = 0;
 
         //Configuration
         this.setStyle("-fx-background-color: #AEB6B7;"+
@@ -44,6 +54,8 @@ public class CharacterWidget extends HBox{
         this.getChildren().add(characterNameLabel);
         this.getChildren().add(blankSpace);
 
+        
+
     }
 
 
@@ -56,8 +68,8 @@ public class CharacterWidget extends HBox{
         super(spacing);
 
         this.name = soul.toString();
-        this.id = Integer.toString(soul.getID());
-        this.bonus = Integer.toString(soul.getBonus());
+        this.id = soul.getID();
+        this.bonus = soul.getBonus();
 
         //Configuration
         this.setStyle("-fx-background-color: #AEB6B7;"+
@@ -78,8 +90,8 @@ public class CharacterWidget extends HBox{
 
     public CharacterWidget(int spacing, 
                            String name, 
-                           String bonus, 
-                           String id){
+                           int bonus, 
+                           int id){
         super(spacing);
         
         this.name = name;
@@ -115,11 +127,11 @@ public class CharacterWidget extends HBox{
         return this.name;
     }
 
-    public String getID(){
+    public int getID(){
         return this.id;
     }
 
-    public String getBonus(){
+    public int getBonus(){
         return this.bonus;
     }
 
@@ -128,6 +140,67 @@ public class CharacterWidget extends HBox{
     }
 
     public void setInitiative(int initiative){
-        this.initiative = initiative + Integer.valueOf(this.bonus);
+        this.initiative = initiative + this.bonus;
     }
+
+    public void addEffect(Effect effect){
+        this.effects.add(effect);
+    }
+
+    public ArrayList<Effect> getEffects(){
+        return this.effects;
+    }
+
+    public void addImmunity(Effect immunity){
+        this.immunities.add(immunity);
+    }
+
+    public ArrayList<Effect> getImmunities(){
+        return this.immunities;
+    }
+
+    /**
+     * Gets the first found occurence of effect with the name property as the one given
+     * @param name The name to look for 
+     * @return returns the first occurence of the effect - returns null if nothing matches
+     */
+    public Effect getEffect(String name){
+        
+        for(Effect effect : this.effects){
+            if (effect.getName().equals(name)){
+                return effect;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Gets the effect with a particular id. This method of obtaining an effect is preferred over 
+     * getEffect(String name)
+     * @param id the id to look for
+     * @return returns an effect that has the given id - returns null if nothing matches
+     */
+    public Effect getEffect(int id){
+        for (Effect effect : this.effects){
+            if (effect.getID() == id){
+                return effect;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Removes an effect from the character based on the given id
+     * @param id id of effect to remove
+     */
+    public void removeEffect(int id){
+        for (Effect effect : this.effects){
+            if (effect.getID() == id){
+                this.effects.remove(effect);
+            }
+        }
+    }
+    
+
 }
+
