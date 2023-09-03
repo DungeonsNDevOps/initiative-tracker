@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import tech.jimothy.db.Database;
 
 public class CreateEffectController {
     @FXML private TextField nameTextField;
@@ -20,3 +21,10 @@ public class CreateEffectController {
     protected void initialize(){
         ;
     }
+
+    public void createEffect(ActionEvent event){
+        Database database = new Database("./sqlite/inibase");
+        
+
+    }
+}
