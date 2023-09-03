@@ -6,7 +6,8 @@ CREATE TABLE campaigns (
 CREATE TABLE characters (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    bonus INTEGER NOT NULL
+    bonus INTEGER NOT NULL,
+    
 );
 
 CREATE TABLE monsters (
@@ -14,3 +15,9 @@ CREATE TABLE monsters (
     name TEXT NOT NULL,
     bonus INTEGER NOT NULL
 );
+
+CREATE TABLE effects (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    bonus INTEGER NOT NULL
+)
