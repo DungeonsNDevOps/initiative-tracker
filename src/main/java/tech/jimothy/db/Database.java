@@ -76,6 +76,14 @@ public class Database {
     }
 
     /**
+     * Gets the current database connection
+     * @return returns the database connection object
+     */
+    public Connection getConn(){
+        return this.conn;
+    }
+
+    /**
      * Method checks a given directory path to see if the immediate
      * parent directory exists.
      * @param url the dir path to be checked
