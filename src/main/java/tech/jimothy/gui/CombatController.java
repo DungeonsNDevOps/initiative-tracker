@@ -6,12 +6,17 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.VBox;
 import tech.jimothy.db.DataShare;
+import tech.jimothy.design.Effect;
+import tech.jimothy.design.EffectItem;
+import tech.jimothy.errors.WidgetMissingChildException;
 import tech.jimothy.gui.custom.CharacterWidget;
 import tech.jimothy.gui.custom.EffectWidget;
+import tech.jimothy.gui.custom.OptionCharacterWidget;
+import tech.jimothy.gui.custom.SearchAndSelectWidget;
 import tech.jimothy.utils.CharacterSortTools;
-import tech.jimothy.utils.Effect;
 
 import java.util.ArrayList;
 
@@ -22,7 +27,8 @@ public class CombatController {
     @FXML Label roundsLabel;
     @FXML Label timeLabel;
     @FXML private VBox effectsView;
-
+    //main view of the page
+    @FXML VBox mainView;
     //the amount of rounds that have taken place
     int rounds = 0;
     //time in seconds that has taken place in combat
@@ -33,6 +39,9 @@ public class CombatController {
     CharacterWidget topOfList;
     //Character that is being focused on for the purpose of viewing effects/properties
     CharacterWidget focusedCharacter;
+    //Indicates whether ot not the AddEffectsWidget currently exists
+    boolean addEffectsWidgetExists = false;
+    
 
     @FXML
     protected void initialize(){
@@ -54,7 +63,7 @@ public class CombatController {
         //sort the characters in descending order based on their initiative
         ArrayList<CharacterWidget> sortedCharacters = CharacterSortTools.charSortDesc(characters);
 
-        //Add characters to their VBox container
+        //Add characters to their VBox container, configuring them as needed
         for (CharacterWidget character : sortedCharacters){
             //set on click to populate effects and properties view
             character.setOnMouseClicked(event -> {
@@ -71,11 +80,52 @@ public class CombatController {
                 populateEffectsView();
                 populatePropertiesView();
             });
+
+            //create new 'add effect' menu option for character widget
+            MenuItem addEffectsOption = new MenuItem("Add Effect");
+            //set the action for the new menu option
+            addEffectsOption.setOnAction(event -> {manifestAddEffectsWidget(character);});
+            ((OptionCharacterWidget)character).getOptionsMenu().getItems().add(addEffectsOption);
+
             character.getChildren().add(new Label("Init: " + String.valueOf(character.getInitiative())));
             charactersContainer.getChildren().add(character);
         }
+        //Set the character that is at the top of turn order
+        this.topOfList = CharacterSortTools.greatestInitiative(this.charactersContainer.getChildren());
 
+        //Set this first character as the character being focused on and then populate the views for that character
+        this.focusedCharacter = this.topOfList;
+        this.focusedCharacter.setStyle(this.focusedCharacter.getStyle() + "; -fx-border-width: 3px; -fx-border-color: Blue;");
+        populateEffectsView();
+    }
 
+    private void manifestAddEffectsWidget(CharacterWidget assocChar){
+
+        if(!this.addEffectsWidgetExists){
+            this.addEffectsWidgetExists = true;
+
+            SearchAndSelectWidget addEffectsWidget = new SearchAndSelectWidget(new EffectItem());
+            try{
+                addEffectsWidget.setOnButtonPress(event -> {
+                    for(Object effectObj : addEffectsWidget.getSelections()){
+                         if(effectObj instanceof Effect){
+                            Effect effect = (Effect)effectObj;
+                            //add effect to the character which is associated with this addEffectsWidget
+                            assocChar.addEffect(effect);
+                            //add an effect widget to the effects view IF this char is currently the one focused on
+                            if(assocChar.equals(this.focusedCharacter)){
+                                this.effectsView.getChildren().add(new EffectWidget(effect, assocChar));
+                            }
+                         }
+                    }
+                    this.mainView.getChildren().remove(addEffectsWidget);
+                    this.addEffectsWidgetExists = false;
+                });
+            } catch (WidgetMissingChildException e){
+                e.printStackTrace();
+            }
+            this.mainView.getChildren().add(addEffectsWidget);
+        }
     }
 
     public void cycle(ActionEvent event){
@@ -114,10 +164,15 @@ public class CombatController {
     }
 
     private void populateEffectsView(){
+        //remove previous population
+        this.effectsView.getChildren().removeAll(this.effectsView.getChildren());
+
         ArrayList<Effect> charEffects = this.focusedCharacter.getEffects();
 
         for (Effect effect : charEffects){
+            System.out.println(effect.getName());
             this.effectsView.getChildren().add(new EffectWidget(effect, this.focusedCharacter));
+
         }
     }
 
