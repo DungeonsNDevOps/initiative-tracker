@@ -1,15 +1,11 @@
 package tech.jimothy.gui;
 
 import java.io.IOException;
-
+import java.sql.SQLException;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Scene;
+import javafx.fxml.FXML; 
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import tech.jimothy.db.Database;
 
 public class CreateEffectController {
@@ -22,9 +18,30 @@ public class CreateEffectController {
         ;
     }
 
-    public void createEffect(ActionEvent event){
+    public void createEffect(ActionEvent event) throws IOException{
         Database database = new Database("./sqlite/inibase");
-        
+        //Get the text from the appropriate text field
+        String effectName = nameTextField.getText();
+        String desc = descTextArea.getText();
+        String duration = durationTextField.getText();
 
+        //add a new row in the effects table for the effect
+        try {
+            database.insert("INSERT INTO effects(name, desc, duration) VALUES(?, ?, ?)",
+                            new String[] {effectName, desc, duration});
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // //create a column in characters table for the effect
+        // try {
+        //     //we append the duration to the name to create uniqueness. 
+        //     //!We should raise an error message if a user attempts to make a duplicate column
+        //     database.modify("ALTER TABLE characters ADD " + effectName + duration + " INTEGER");
+        // } catch (SQLException e) {
+        //     e.printStackTrace();
+        // }
+        new CampaignController().goToCampaignPage(event);
+        database.close();
     }
 }
