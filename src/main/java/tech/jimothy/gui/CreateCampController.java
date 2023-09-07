@@ -4,59 +4,66 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import tech.jimothy.db.Database;
-import tech.jimothy.db.Table;
+import tech.jimothy.design.CharacterItem;
+import tech.jimothy.design.Entity;
+import tech.jimothy.gui.custom.SearchAndSelectWidget;
 
 public class CreateCampController {
 
-    /**Injectable variable for the character selection MenuButton */
-    @FXML private ListView<String> characterListView;
     /**Injectable TextField for the campaign name */
     @FXML private TextField campaignTextField;
     /**Injectable warning label */
     @FXML private Label warningLabel;
+    //root of scene
+    @FXML private AnchorPane root;
+    //*SearchAndSelect */
+    SearchAndSelectWidget searchAndSelect;
 
     /**
      * Method runs when the FXML for this controller is built with FXMLLoader
      */
     @FXML
     protected void initialize(){
-        Database database = new Database("./sqlite/inibase");
-        Table charactersTable = database.query("SELECT* FROM characters");
-        characterListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        for (int i = 0; i < charactersTable.getSize(); i++){
-            HashMap<String, Object> character = charactersTable.row(i);
-            characterListView.getItems().add(character.get("name").toString());
-        }
-        database.close();
+        // Testing SearchAndSelect widget ------------------
+        this.searchAndSelect = new SearchAndSelectWidget(new CharacterItem());
+        this.searchAndSelect.setHasButton(false);
+        this.searchAndSelect.setLayoutX(252);
+        this.searchAndSelect.setLayoutY(271);
+        this.searchAndSelect.setPrefSize(200, 145);
+        root.getChildren().add(this.searchAndSelect);
     }
+
     //TODO: Rows are still being added despite SQL duplicate error. Implement a better way to validate non-dupe campaigns.
     public void createCampaign(ActionEvent event) throws SQLException, IOException{
         String campaignName = campaignTextField.getText();
-        ObservableList<Integer> characterSelections = characterListView
-                                                    .getSelectionModel()
-                                                    .getSelectedIndices();
+        ObservableList<Entity> charSelections = FXCollections.observableArrayList();
+        for (Object object : this.searchAndSelect.getSelections()){
+            if (object instanceof Entity){
+                charSelections.add((Entity)object);
+            }
+        }
         Database database = new Database("./sqlite/inibase"); 
         try{
             database.insert("INSERT INTO campaigns(name) VALUES(?)", new String[] {campaignName});
             database.modify("ALTER TABLE characters ADD " + campaignName + " INTEGER");
-            for(int characterIndex : characterSelections){
-                System.out.println(characterIndex);
+            for(Entity character : charSelections){
+                // System.out.println(character.getID());
                 database.modify("UPDATE characters SET " + campaignName + " = 1" + 
-                                " WHERE id = " + (characterIndex+1));
+                                " WHERE id = " + character.getID());
             }
             new CampaignController().goToCampaignPage(event);
             database.close();
         } catch(SQLException e){
             warningLabel.setVisible(true);
         }
-    }
+     }
 }
