@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="755.0" prefWidth="694.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.jimothy.gui.CreateEffectController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="755.0" prefWidth="694.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.jimothy.gui.CreateEffectController">
    <children>
       <Label layoutX="247.0" layoutY="39.0" text="Create Effect">
          <font>
@@ -32,6 +32,6 @@
             <Font name="Book Antiqua" size="24.0" />
          </font>
       </Label>
-      <TextField fx:id="durationTextFIeld" layoutX="276.0" layoutY="612.0" />
+      <TextField fx:id="durationTextField" layoutX="276.0" layoutY="612.0" />
    </children>
 </AnchorPane>
