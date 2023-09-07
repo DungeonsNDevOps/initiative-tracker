@@ -87,7 +87,7 @@
     </MenuBar>
       <SplitPane dividerPositions="0.7460815047021944" prefHeight="378.0" prefWidth="640.0">
          <items>
-            <VBox prefHeight="200.0" prefWidth="100.0">
+            <VBox fx:id="mainView" prefHeight="200.0" prefWidth="100.0">
                <children>
                   <Label alignment="CENTER" prefHeight="45.0" prefWidth="485.0" text="Turn Order">
                      <font>
