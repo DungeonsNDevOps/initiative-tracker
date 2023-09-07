@@ -7,8 +7,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import tech.jimothy.utils.Effect;
-import tech.jimothy.utils.Entity;
+import tech.jimothy.design.Effect;
+import tech.jimothy.design.Entity;
 
 /**
  * A javafx component or 'widget' that is for displaying character/monster data.
@@ -144,7 +144,18 @@ public class CharacterWidget extends HBox{
     }
 
     public void addEffect(Effect effect){
-        this.effects.add(effect);
+        boolean alreadyContains = false;
+        for(Effect anEffect : this.effects){
+            if (anEffect.getID() == effect.getID()){
+                alreadyContains = true;
+                break;
+            }
+        }
+        if(!alreadyContains){
+            this.effects.add(effect);
+        } else {
+            ; //TODO: Create custom exception for when a duplicate effect has been attempted
+        }
     }
 
     public ArrayList<Effect> getEffects(){
