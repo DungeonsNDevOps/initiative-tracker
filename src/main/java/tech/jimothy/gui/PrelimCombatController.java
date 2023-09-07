@@ -14,7 +14,7 @@ import tech.jimothy.db.DataShare;
 import tech.jimothy.db.Database;
 import tech.jimothy.db.Table;
 import tech.jimothy.gui.custom.CharacterWidget;
-import tech.jimothy.gui.custom.KillableCharacterWidget;
+import tech.jimothy.gui.custom.OptionCharacterWidget;
 import tech.jimothy.gui.custom.SpotlightPane;
 
 import java.io.IOException;
@@ -96,7 +96,7 @@ public class PrelimCombatController {
                 String initiative = ((TextField)charWidget.getChildren()
                                                           .get(2))
                                                           .getText();
-                KillableCharacterWidget killableChar = new KillableCharacterWidget(
+                OptionCharacterWidget killableChar = new OptionCharacterWidget(
                                                                                     0,
                                                                                     charWidget.getName(),
                                                                                     charWidget.getBonus(),

@@ -13,8 +13,9 @@ import javafx.stage.Stage;
 import tech.jimothy.db.DataShare;
 import tech.jimothy.db.Database;
 import tech.jimothy.db.Table;
-import tech.jimothy.gui.custom.CharAddWidget;
-import tech.jimothy.gui.custom.KillableCharacterWidget;
+import tech.jimothy.design.CharacterItem;
+import tech.jimothy.gui.custom.SearchAndSelectWidget;
+import tech.jimothy.gui.custom.OptionCharacterWidget;
 
 public class SelectedCampController {
     
@@ -63,7 +64,7 @@ public class SelectedCampController {
 
     public void addCharacter(ActionEvent event){
         if(!addCharacterWidgetExists){
-            CharAddWidget addCharacterWidget = new CharAddWidget(this.charactersVBox, 0);
+            SearchAndSelectWidget addCharacterWidget = new SearchAndSelectWidget(this.charactersVBox, new CharacterItem());
             this.addCharacterWidget = addCharacterWidget; 
 
             AnchorPane.setLeftAnchor(addCharacterWidget, 20.0);
@@ -97,7 +98,7 @@ public class SelectedCampController {
             String characterName = charactersTable.get(i, "name");
             int characterBonus = Integer.valueOf(charactersTable.get(i, "bonus"));
             int characterID = Integer.valueOf(charactersTable.get(i, "id"));
-            KillableCharacterWidget character = new KillableCharacterWidget(20, 
+            OptionCharacterWidget character = new OptionCharacterWidget(20, 
                                                             characterName, characterBonus,
                                                             characterID
                                                             );
