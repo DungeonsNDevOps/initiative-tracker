@@ -43,13 +43,9 @@
   <children>
       <MenuBar>
         <menus>
-          <Menu mnemonicParsing="false" text="Campaigns">
+          <Menu mnemonicParsing="false" text="New">
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#goToCreateCampaign" text="New Campaign" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Characters">
-            <items>
               <MenuItem mnemonicParsing="false" onAction="#goToCreateCharacter" text="New Character" />
                   <MenuItem mnemonicParsing="false" text="New Monster" />
                   <MenuItem mnemonicParsing="false" onAction="#goToCreateEffect" text="New Effect" />

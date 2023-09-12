@@ -46,16 +46,12 @@
   <children>
       <MenuBar>
         <menus>
-          <Menu mnemonicParsing="false" text="Campaigns">
+          <Menu mnemonicParsing="false" text="New">
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#goToCreateCampaign" text="New Campaign" />
-                  <MenuItem mnemonicParsing="false" onAction="#goToCampaignPage" text="Campaigns" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Characters">
-            <items>
               <MenuItem mnemonicParsing="false" onAction="#goToCreateCharacter" text="New Character" />
                   <MenuItem mnemonicParsing="false" text="New Monster" />
+                  <MenuItem mnemonicParsing="false" onAction="#goToCreateEffect" text="New Effect" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
@@ -81,6 +77,7 @@
                   <Button layoutX="217.0" layoutY="10.0" mnemonicParsing="false" onAction="#goToPreliminaryCombatPage" prefHeight="62.0" prefWidth="208.0" text="Start Combat" />
                </children>
             </HBox>
+            <Button layoutY="14.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
          </children>
     </AnchorPane>
   </children>
