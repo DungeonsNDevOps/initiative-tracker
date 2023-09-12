@@ -11,13 +11,16 @@ import javafx.scene.layout.VBox;
 import tech.jimothy.db.DataShare;
 import tech.jimothy.design.Effect;
 import tech.jimothy.design.EffectItem;
+import tech.jimothy.errors.StageNotSetForNav;
 import tech.jimothy.errors.WidgetMissingChildException;
 import tech.jimothy.gui.custom.CharacterWidget;
 import tech.jimothy.gui.custom.EffectWidget;
 import tech.jimothy.gui.custom.OptionCharacterWidget;
 import tech.jimothy.gui.custom.SearchAndSelectWidget;
+import tech.jimothy.gui.nav.Nav;
 import tech.jimothy.utils.CharacterSortTools;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class CombatController {
@@ -41,6 +44,9 @@ public class CombatController {
     CharacterWidget focusedCharacter;
     //Indicates whether ot not the AddEffectsWidget currently exists
     boolean addEffectsWidgetExists = false;
+
+        /**The navigation object used to naviagting around the app */
+    Nav navigation = Nav.getInstance();
     
 
     @FXML
@@ -178,6 +184,11 @@ public class CombatController {
 
     private void populatePropertiesView(){
         ;
+    }
+
+
+    public void endCombat() throws IOException, StageNotSetForNav{
+        navigation.goToSelectedCampaignPage(DataShare.getInstance().getInt());
     }
 }
  

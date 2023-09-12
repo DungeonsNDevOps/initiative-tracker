@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import tech.jimothy.db.Database;
 import tech.jimothy.db.Table;
+import tech.jimothy.gui.nav.Nav;
 
 public class Window extends Application{
 
@@ -22,6 +23,9 @@ public class Window extends Application{
             System.out.println(table.get(i, "name"));
         }
         //---------------------------------------------------------
+        //Set up the Nav class by statically setting the stage
+        Nav.setStage(stage);
+        
         Parent root = FXMLLoader.load(getClass().getResource("/tech/jimothy/fxml/campaign-page.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);

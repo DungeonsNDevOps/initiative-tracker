@@ -16,6 +16,7 @@ import tech.jimothy.db.Table;
 import tech.jimothy.gui.custom.CharacterWidget;
 import tech.jimothy.gui.custom.OptionCharacterWidget;
 import tech.jimothy.gui.custom.SpotlightPane;
+import tech.jimothy.gui.nav.Nav;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,6 +30,9 @@ public class PrelimCombatController {
     @FXML Button backButton;
 
     SpotlightPane spotlightPane;
+
+        /**The navigation object used to naviagting around the app */
+    Nav navigation = Nav.getInstance();
 
     @FXML
     protected void initialize(){
@@ -116,7 +120,7 @@ public class PrelimCombatController {
         stage.show();
     }
 
-    public void back(ActionEvent event){
-        ;
+    public void goBack(ActionEvent event){
+        navigation.goToLastPage();
     }
 }

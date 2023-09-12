@@ -14,7 +14,9 @@ import tech.jimothy.db.DataShare;
 import tech.jimothy.db.Database;
 import tech.jimothy.db.Table;
 import tech.jimothy.design.CharacterItem;
+import tech.jimothy.errors.StageNotSetForNav;
 import tech.jimothy.gui.custom.SearchAndSelectWidget;
+import tech.jimothy.gui.nav.Nav;
 import tech.jimothy.gui.custom.OptionCharacterWidget;
 
 public class SelectedCampController {
@@ -28,38 +30,42 @@ public class SelectedCampController {
 
     private VBox addCharacterWidget;
     private boolean addCharacterWidgetExists = false;
+    /**The navigation object used to naviagting around the app */
+    Nav navigation = Nav.getInstance();
 
-    public void goToCampaignPage(ActionEvent event) throws IOException{
-        stage = (Stage)root.getScene().getWindow();
-        root = FXMLLoader.load(getClass().getResource("/tech/jimothy/fxml/campaign-page.fxml"));
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+    public void goToCampaignPage(ActionEvent event) throws IOException, StageNotSetForNav{
+        navigation.goToCampaignPage();
     }
 
-    public void goToCreateCampaign(ActionEvent event) throws IOException{
-        stage = (Stage)root.getScene().getWindow();
-        root = FXMLLoader.load(getClass().getResource("/tech/jimothy/fxml/create-campaign-page.fxml"));
-        
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+    public void goToCreateCampaign(ActionEvent event) throws IOException, StageNotSetForNav{
+        navigation.goToCreateCampaign();
     }
 
-    public void goToCreateCharacter(ActionEvent event) throws IOException{
-        stage = (Stage)root.getScene().getWindow();
-        root = FXMLLoader.load(getClass().getResource("/tech/jimothy/fxml/create-character-page.fxml"));
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+    public void goToCreateCharacter(ActionEvent event) throws IOException, StageNotSetForNav{
+        navigation.goToCreateCharacter();
     }
 
     public void goToPreliminaryCombatPage() throws IOException{
+        navigation.setLastPage(() -> {
+            try {
+                navigation.goToSelectedCampaignPage(DataShare.getInstance().getInt());
+            } catch (IOException | StageNotSetForNav e) {
+                e.printStackTrace();
+            }
+        });
         stage = (Stage)root.getScene().getWindow();
         root = FXMLLoader.load(getClass().getResource("/tech/jimothy/fxml/preliminary-combat-page.fxml"));
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void goToCreateEffect() throws IOException, StageNotSetForNav{
+        navigation.goToCreateEffect();
+    }
+
+    public void goBack(){
+        navigation.goToLastPage();
     }
 
     public void addCharacter(ActionEvent event){

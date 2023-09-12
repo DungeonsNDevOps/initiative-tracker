@@ -2,8 +2,6 @@ package tech.jimothy.gui;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.HashMap;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,7 +12,9 @@ import javafx.scene.layout.AnchorPane;
 import tech.jimothy.db.Database;
 import tech.jimothy.design.CharacterItem;
 import tech.jimothy.design.Entity;
+import tech.jimothy.errors.StageNotSetForNav;
 import tech.jimothy.gui.custom.SearchAndSelectWidget;
+import tech.jimothy.gui.nav.Nav;
 
 public class CreateCampController {
 
@@ -26,6 +26,8 @@ public class CreateCampController {
     @FXML private AnchorPane root;
     //*SearchAndSelect */
     SearchAndSelectWidget searchAndSelect;
+    /**The navigation object used to naviagting around the app */
+    Nav navigation = Nav.getInstance();
 
     /**
      * Method runs when the FXML for this controller is built with FXMLLoader
@@ -60,10 +62,12 @@ public class CreateCampController {
                 database.modify("UPDATE characters SET " + campaignName + " = 1" + 
                                 " WHERE id = " + character.getID());
             }
-            new CampaignController().goToCampaignPage(event);
+            navigation.goToCampaignPage();
             database.close();
         } catch(SQLException e){
             warningLabel.setVisible(true);
+        } catch (StageNotSetForNav e) {
+            e.printStackTrace();
         }
      }
 }
