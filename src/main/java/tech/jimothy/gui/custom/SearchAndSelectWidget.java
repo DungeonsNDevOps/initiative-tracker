@@ -8,7 +8,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -19,14 +18,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import tech.jimothy.db.DataShare;
 import tech.jimothy.db.Database;
-import tech.jimothy.db.Table;
 import tech.jimothy.design.Entity;
-import tech.jimothy.design.EntityList;
 import tech.jimothy.design.ItemType;
 import tech.jimothy.errors.TableNotFoundException;
 import tech.jimothy.errors.WidgetMissingChildException;
-import tech.jimothy.errors.TableNotFoundException;
-
 
 //TODO: Consider refactoring code to no longer use 'Entity' class as character representation in ViewLists
 /**
