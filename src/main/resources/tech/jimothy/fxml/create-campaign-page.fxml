@@ -26,5 +26,6 @@
       </Label>
       <Button layoutX="301.0" layoutY="447.0" mnemonicParsing="false" onAction="#createCampaign" prefHeight="30.0" prefWidth="101.0" text="Create" />
       <Label fx:id="warningLabel" layoutX="259.0" layoutY="211.0" text="Campaign name already exists." textFill="#eb0000" visible="false" />
+      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
    </children>
 </AnchorPane>

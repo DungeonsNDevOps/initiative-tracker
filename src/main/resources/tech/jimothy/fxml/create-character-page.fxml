@@ -27,5 +27,6 @@
       <TextField fx:id="characterBonusField" layoutX="276.0" layoutY="294.0" />
       <Button layoutX="323.0" layoutY="382.0" mnemonicParsing="false" onAction="#createCharacter" text="Create" />
       <Label fx:id="bonusWarningMessage" layoutX="276.0" layoutY="341.0" prefHeight="18.0" prefWidth="152.0" textFill="RED" />
+      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
    </children>
 </AnchorPane>

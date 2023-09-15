@@ -33,5 +33,6 @@
          </font>
       </Label>
       <TextField fx:id="durationTextField" layoutX="276.0" layoutY="612.0" />
+      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
    </children>
 </AnchorPane>
