@@ -3,6 +3,7 @@ package tech.jimothy.gui;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
@@ -116,11 +117,13 @@ public class CombatController {
                     for(Object effectObj : addEffectsWidget.getSelections()){
                          if(effectObj instanceof Effect){
                             Effect effect = (Effect)effectObj;
-                            //add effect to the character which is associated with this addEffectsWidget
-                            assocChar.addEffect(effect);
+                            
                             //add an effect widget to the effects view IF this char is currently the one focused on
-                            if(assocChar.equals(this.focusedCharacter)){
+                            //AND the associated character widget does not currently have an instance of the effect already(compare effect id)
+                            if(assocChar.equals(this.focusedCharacter) && !assocChar.hasEffect(effect.getID())){
                                 this.effectsView.getChildren().add(new EffectWidget(effect, assocChar));
+                                //add effect to the character which is associated with this addEffectsWidget
+                                assocChar.addEffect(effect);
                             }
                          }
                     }
@@ -177,7 +180,10 @@ public class CombatController {
 
         for (Effect effect : charEffects){
             System.out.println(effect.getName());
-            this.effectsView.getChildren().add(new EffectWidget(effect, this.focusedCharacter));
+            EffectWidget effectWidget = new EffectWidget(effect, this.focusedCharacter);
+            //add padding to effect widget to create space between widgets
+            effectWidget.setPadding(new Insets(0, 0, 10, 0));
+            this.effectsView.getChildren().add(effectWidget);
 
         }
     }
