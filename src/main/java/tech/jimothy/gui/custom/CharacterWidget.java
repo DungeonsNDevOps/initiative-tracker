@@ -143,6 +143,15 @@ public class CharacterWidget extends HBox{
         this.initiative = initiative + this.bonus;
     }
 
+    public boolean hasEffect(int effectID){
+        for(Effect anEffect : this.effects){
+            if (anEffect.getID() == effectID){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void addEffect(Effect effect){
         boolean alreadyContains = false;
         for(Effect anEffect : this.effects){
@@ -208,6 +217,7 @@ public class CharacterWidget extends HBox{
         for (Effect effect : this.effects){
             if (effect.getID() == id){
                 this.effects.remove(effect);
+                break;
             }
         }
     }
