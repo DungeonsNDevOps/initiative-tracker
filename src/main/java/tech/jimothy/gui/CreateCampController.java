@@ -12,7 +12,6 @@ import javafx.scene.layout.AnchorPane;
 import tech.jimothy.db.Database;
 import tech.jimothy.design.CharacterItem;
 import tech.jimothy.design.Entity;
-import tech.jimothy.errors.StageNotSetForNav;
 import tech.jimothy.gui.custom.SearchAndSelectWidget;
 import tech.jimothy.gui.nav.Nav;
 
@@ -62,12 +61,14 @@ public class CreateCampController {
                 database.modify("UPDATE characters SET " + campaignName + " = 1" + 
                                 " WHERE id = " + character.getID());
             }
-            navigation.goToCampaignPage();
             database.close();
+            navigation.goToLastPage();
         } catch(SQLException e){
             warningLabel.setVisible(true);
-        } catch (StageNotSetForNav e) {
-            e.printStackTrace();
         }
+     }
+
+     public void goBack(){
+        navigation.goToLastPage();
      }
 }

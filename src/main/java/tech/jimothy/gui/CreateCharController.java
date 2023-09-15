@@ -32,7 +32,10 @@ public class CreateCharController {
             bonusWarningMessage.setText("Bonus must be an integer!");
         }
         database.close();
+        navigation.goToLastPage();
     }
 
-
+    public void goBack(){
+        navigation.goToLastPage();
+     }
 }

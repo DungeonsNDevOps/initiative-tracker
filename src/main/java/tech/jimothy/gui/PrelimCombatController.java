@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import tech.jimothy.db.DataShare;
 import tech.jimothy.db.Database;
 import tech.jimothy.db.Table;
+import tech.jimothy.errors.StageNotSetForNav;
 import tech.jimothy.gui.custom.CharacterWidget;
 import tech.jimothy.gui.custom.OptionCharacterWidget;
 import tech.jimothy.gui.custom.SpotlightPane;
@@ -121,6 +122,10 @@ public class PrelimCombatController {
     }
 
     public void goBack(ActionEvent event){
-        navigation.goToLastPage();
+        try {
+            navigation.goToSelectedCampaignPage(DataShare.getInstance().getInt());;
+        } catch (IOException | StageNotSetForNav e) {
+            e.printStackTrace();
+        }
     }
 }

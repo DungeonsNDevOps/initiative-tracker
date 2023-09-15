@@ -45,7 +45,12 @@ public class CreateEffectController {
         // } catch (SQLException e) {
         //     e.printStackTrace();
         // }
-        navigation.goToCampaignPage();
+
         database.close();
+        navigation.goToLastPage();
     }
+
+    public void goBack(){
+        navigation.goToLastPage();
+     }
 }
