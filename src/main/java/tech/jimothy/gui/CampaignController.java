@@ -27,14 +27,35 @@ public class CampaignController {
 
     public void goToCreateCampaign(ActionEvent event) throws IOException, StageNotSetForNav{
         navigation.goToCreateCampaign();
+        navigation.setLastPage(() -> {
+            try {
+                navigation.goToCampaignPage();
+            } catch (IOException | StageNotSetForNav e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public void goToCreateCharacter(ActionEvent event) throws IOException, StageNotSetForNav{
         navigation.goToCreateCharacter();
+        navigation.setLastPage(() -> {
+            try {
+                navigation.goToCampaignPage();
+            } catch (IOException | StageNotSetForNav e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public void goToCreateEffect(ActionEvent event) throws IOException, StageNotSetForNav{
         navigation.goToCreateEffect();
+        navigation.setLastPage(() -> {
+            try {
+                navigation.goToCampaignPage();
+            } catch (IOException | StageNotSetForNav e) {
+                e.printStackTrace();
+            }
+        });
     }
 
 
@@ -50,14 +71,6 @@ public class CampaignController {
             int campaignID = i+1;
             campaignButton.setOnAction(actionEvent -> {             
                 try {
-                    //set last page to this page
-                    navigation.setLastPage(() -> {
-                        try {
-                            navigation.goToCampaignPage();
-                        } catch (IOException | StageNotSetForNav e) {
-                            e.printStackTrace();
-                        }
-                    });
                     navigation.goToSelectedCampaignPage(campaignID);
                 } catch (IOException | StageNotSetForNav e) {
                     e.printStackTrace();

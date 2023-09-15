@@ -5,6 +5,7 @@ import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -39,13 +40,6 @@ public class SelectedCampController {
 
     public void goToCreateCampaign(ActionEvent event) throws IOException, StageNotSetForNav{
         navigation.goToCreateCampaign();
-    }
-
-    public void goToCreateCharacter(ActionEvent event) throws IOException, StageNotSetForNav{
-        navigation.goToCreateCharacter();
-    }
-
-    public void goToPreliminaryCombatPage() throws IOException{
         navigation.setLastPage(() -> {
             try {
                 navigation.goToSelectedCampaignPage(DataShare.getInstance().getInt());
@@ -53,6 +47,20 @@ public class SelectedCampController {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void goToCreateCharacter(ActionEvent event) throws IOException, StageNotSetForNav{
+        navigation.goToCreateCharacter();
+        navigation.setLastPage(() -> {
+            try {
+                navigation.goToSelectedCampaignPage(DataShare.getInstance().getInt());
+            } catch (IOException | StageNotSetForNav e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void goToPreliminaryCombatPage() throws IOException{
         stage = (Stage)root.getScene().getWindow();
         root = FXMLLoader.load(getClass().getResource("/tech/jimothy/fxml/preliminary-combat-page.fxml"));
         scene = new Scene(root);
@@ -62,10 +70,22 @@ public class SelectedCampController {
 
     public void goToCreateEffect() throws IOException, StageNotSetForNav{
         navigation.goToCreateEffect();
+        navigation.setLastPage(() -> {
+            try {
+                navigation.goToSelectedCampaignPage(DataShare.getInstance().getInt());
+            } catch (IOException | StageNotSetForNav e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public void goBack(){
-        navigation.goToLastPage();
+        try {
+            navigation.goToCampaignPage();
+        } catch (IOException | StageNotSetForNav e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public void addCharacter(ActionEvent event){
@@ -108,6 +128,7 @@ public class SelectedCampController {
                                                             characterName, characterBonus,
                                                             characterID
                                                             );
+            character.setPrefWidth(100);
             this.charactersVBox.getChildren().add(character);
         }
         database.close();
