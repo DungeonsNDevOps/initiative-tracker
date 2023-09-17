@@ -9,8 +9,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import tech.jimothy.design.Effect;
+import tech.jimothy.design.Observable;
+import tech.jimothy.design.Observer;
+import javafx.scene.layout.Region;
 
-public class EffectWidget extends Pane{
+public class EffectWidget extends Pane implements Observer{
     
     private Effect effect;
     private ImageView icon;
@@ -20,6 +23,8 @@ public class EffectWidget extends Pane{
 
     private HBox innerContainer;
 
+    private Observable observableEffect;
+
     public EffectWidget(){
         this.effect = null;
         this.associatedChar = null;
@@ -28,6 +33,9 @@ public class EffectWidget extends Pane{
     public EffectWidget(Effect effect, CharacterWidget associatedChar){
         this.effect = effect;
         this.associatedChar = associatedChar;
+
+        //Register this EffectWidget as an observer of the effect
+        this.effect.registerObserver(this);
 
         
 
@@ -71,4 +79,24 @@ public class EffectWidget extends Pane{
             
         });
     }
+
+//*-------------------Observer Methods---------------------------------------------
+
+    /**
+     * Called only when the effect has notified this EffectWidget that it has expired
+     */
+    @Override
+    public void update(){
+        this.observableEffect.removeObserver(this);
+        ((Pane)this.getParent()).getChildren().remove(this);
+        this.effect = null;
+        this.observableEffect = null;
+    }
+
+    @Override
+    public void registerObservable(Observable o){
+        this.observableEffect = o;
+    }
+
+//*--------------------------------------------------------------------------------
 }

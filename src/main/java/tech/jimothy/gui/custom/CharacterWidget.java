@@ -9,6 +9,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import tech.jimothy.design.Effect;
 import tech.jimothy.design.Entity;
+import tech.jimothy.design.Observable;
+import tech.jimothy.design.Observer;
 
 /**
  * A javafx component or 'widget' that is for displaying character/monster data.
@@ -18,7 +20,7 @@ import tech.jimothy.design.Entity;
  * about the character as well. 
  */
 
-public class CharacterWidget extends HBox{
+public class CharacterWidget extends HBox implements Observer{
 
     /**Name of the character */
     private String name;
@@ -32,6 +34,13 @@ public class CharacterWidget extends HBox{
     private ArrayList<Effect> effects = new ArrayList<>();
     /**The character's effect immunities */
     private ArrayList<Effect> immunities = new ArrayList<>();
+
+    /**Remember that this is the current effect needing to be removed. 
+     * CharacterWidget takes a look at this whenever the Observer.update() method is called
+     * It is set by Observer.registerObservable()
+     * It will change depending on which effect is currely notifying this Observer
+     */
+    Observable effectReadyForRemoval;
 
     public CharacterWidget(){
 
@@ -162,6 +171,9 @@ public class CharacterWidget extends HBox{
         }
         if(!alreadyContains){
             this.effects.add(effect);
+
+            //register this character widget as an observer of the effect
+            effect.registerObserver(this);
         } else {
             ; //TODO: Create custom exception for when a duplicate effect has been attempted
         }
@@ -221,7 +233,29 @@ public class CharacterWidget extends HBox{
             }
         }
     }
-    
+
+    public void removeEffects(ArrayList<Effect> effects){
+        this.effects.removeAll(effects);
+    }
+
+//*-------------------Observer Methods---------------------------------------------
+
+    /**
+     * Called only when an effect is ready for removal(it has expired)
+     */
+    @Override
+    public void update(){
+        removeEffect(((Effect)effectReadyForRemoval).getID());
+        this.effectReadyForRemoval.removeObserver(this);
+        this.effectReadyForRemoval = null;
+    }
+
+    @Override
+    public void registerObservable(Observable o){
+        this.effectReadyForRemoval = o;
+    }
+
+//*--------------------------------------------------------------------------------
 
 }
 

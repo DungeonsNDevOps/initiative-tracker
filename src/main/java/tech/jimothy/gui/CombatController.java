@@ -12,6 +12,9 @@ import javafx.scene.layout.VBox;
 import tech.jimothy.db.DataShare;
 import tech.jimothy.design.Effect;
 import tech.jimothy.design.EffectItem;
+import tech.jimothy.design.Observable;
+import tech.jimothy.design.ObservableInt;
+import tech.jimothy.design.Observer;
 import tech.jimothy.errors.StageNotSetForNav;
 import tech.jimothy.errors.WidgetMissingChildException;
 import tech.jimothy.gui.custom.CharacterWidget;
@@ -24,7 +27,7 @@ import tech.jimothy.utils.CharacterSortTools;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class CombatController {
+public class CombatController{
 
     @FXML Parent root;
     @FXML VBox charactersContainer;
@@ -36,7 +39,7 @@ public class CombatController {
     //the amount of rounds that have taken place
     int rounds = 0;
     //time in seconds that has taken place in combat
-    int time = 0;
+    ObservableInt observableTime = new ObservableInt(0);
     //the amount of turns that have taken place
     int turns = 0;
     //character with the current largest initiative
@@ -117,11 +120,19 @@ public class CombatController {
                     for(Object effectObj : addEffectsWidget.getSelections()){
                          if(effectObj instanceof Effect){
                             Effect effect = (Effect)effectObj;
+
+                            //register the effect object as an observer of the combat time
+                            observableTime.registerObserver(effect);
                             
                             //add an effect widget to the effects view IF this char is currently the one focused on
                             //AND the associated character widget does not currently have an instance of the effect already(compare effect id)
-                            if(assocChar.equals(this.focusedCharacter) && !assocChar.hasEffect(effect.getID())){
-                                this.effectsView.getChildren().add(new EffectWidget(effect, assocChar));
+                            if(!assocChar.hasEffect(effect.getID())){
+                                if (assocChar.equals(this.focusedCharacter)){
+                                    EffectWidget effectWidget = new EffectWidget(effect, assocChar);
+
+
+                                    this.effectsView.getChildren().add(effectWidget);
+                                }
                                 //add effect to the character which is associated with this addEffectsWidget
                                 assocChar.addEffect(effect);
                             }
@@ -160,19 +171,26 @@ public class CombatController {
 
     }
 
-    public void addTime(){
-        this.time += 6;
+    private void addTime(){
+        this.observableTime.setInt(this.observableTime.getInt() + 6);
         
         String[] temp = this.timeLabel.getText().split(" ");
 
-        if (this.time < 60){
-            this.timeLabel.setText(temp[0] + " " + String.valueOf(this.time) + " s");
+        if (this.observableTime.getInt() < 60){
+            this.timeLabel.setText(temp[0] + " " + String.valueOf(this.observableTime.getInt()) + " s");
         } else{
-            this.timeLabel.setText(temp[0] + " " + String.valueOf(this.time/60) + " m " + String.valueOf(this.time % 60) + " s");
-        }
+            this.timeLabel.setText(temp[0] + " " + String.valueOf(this.observableTime.getInt()/60) + 
+            " m " + String.valueOf(this.observableTime.getInt() % 60) + " s");
+        }   
     }
 
     private void populateEffectsView(){
+
+        //Ensure the removal of the EffectWidget from old population from the list of observers for each effect
+        for(Node child : this.effectsView.getChildren()){
+            Effect effect = ((EffectWidget)child).grabEffect();
+            effect.removeObserver((Observer)child);
+        }
         //remove previous population
         this.effectsView.getChildren().removeAll(this.effectsView.getChildren());
 
@@ -181,6 +199,7 @@ public class CombatController {
         for (Effect effect : charEffects){
             System.out.println(effect.getName());
             EffectWidget effectWidget = new EffectWidget(effect, this.focusedCharacter);
+
             //add padding to effect widget to create space between widgets
             effectWidget.setPadding(new Insets(0, 0, 10, 0));
             this.effectsView.getChildren().add(effectWidget);
@@ -196,5 +215,6 @@ public class CombatController {
     public void endCombat() throws IOException, StageNotSetForNav{
         navigation.goToSelectedCampaignPage(DataShare.getInstance().getInt());
     }
+
 }
  
