@@ -81,6 +81,17 @@ public class Nav {
         }
     }    
 
+    public void goToCreateMonster() throws IOException, StageNotSetForNav{
+        Parent root = FXMLLoader.load(getClass().getResource("/tech/jimothy/fxml/create-monster-page.fxml"));
+        Scene scene = new Scene(root);
+        if (stage != null){
+            stage.setScene(scene);
+            stage.show();
+        } else{
+            throw new StageNotSetForNav();
+        }
+    }    
+
     public void setLastPage(NavMethodObj method){
         this.lastPage = method;
     }
