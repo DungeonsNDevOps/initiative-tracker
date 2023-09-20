@@ -4,20 +4,20 @@ import java.util.ArrayList;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import tech.jimothy.gui.custom.CharacterWidget;
+import tech.jimothy.gui.custom.EntityWidget;
 
-public class CharacterSortTools {
+public class EntitySortTools {
     
     /**
-     * Method sorts the characters based on their initiative in descending order. It uses the 
+     * Method sorts the entitys based on their initiative in descending order. It uses the 
      * Insertion Sort algorithm implementation in order to acheive this. 
-     * @param array The arraylist of CharacterWidget's
-     * @return Returns a sorted ArrayList of CharacterWidget's
+     * @param array The arraylist of entityWidget's
+     * @return Returns a sorted ArrayList of entityWidget's
      */
-    public static ArrayList<CharacterWidget> charSortDesc(ArrayList<CharacterWidget> array){
+    public static ArrayList<EntityWidget> charSortDesc(ArrayList<EntityWidget> array){
         for(int i = 1; i < array.size(); i++){
             //store the current element that will be compared 
-            CharacterWidget current = array.get(i);
+            EntityWidget current = array.get(i);
             //index j will be what we move backwards to compare previous elements to the current
             //it should start one behind the current
             int j = i - 1;
@@ -37,15 +37,15 @@ public class CharacterSortTools {
         return array;
     }
 
-    public static CharacterWidget greatestInitiative(ObservableList<Node> observableList){
-        CharacterWidget greatestInitiative = new CharacterWidget(); 
+    public static EntityWidget greatestInitiative(ObservableList<Node> observableList){
+        EntityWidget greatestInitiative = new EntityWidget(); 
 
-        if(observableList.get(0) instanceof CharacterWidget){
-            greatestInitiative = (CharacterWidget)observableList.get(0);
+        if(observableList.get(0) instanceof EntityWidget){
+            greatestInitiative = (EntityWidget)observableList.get(0);
             for(int i = 1; i < observableList.size(); i++){
-                CharacterWidget character = (CharacterWidget)observableList.get(i);
-                if (character.getInitiative() > greatestInitiative.getInitiative()){
-                    greatestInitiative = character;
+                EntityWidget entity = (EntityWidget)observableList.get(i);
+                if (entity.getInitiative() > greatestInitiative.getInitiative()){
+                    greatestInitiative = entity;
                 }
             }  
         }
@@ -53,12 +53,12 @@ public class CharacterSortTools {
         return greatestInitiative;
     }
 
-    public static CharacterWidget greatestInitiative(ArrayList<CharacterWidget> characters){
-        CharacterWidget greatestInitiative = characters.get(0);
-        for(int i = 1; i < characters.size(); i++){
-            CharacterWidget character = (CharacterWidget)characters.get(i);
-            if (character.getInitiative() > greatestInitiative.getInitiative()){
-                greatestInitiative = character;
+    public static EntityWidget greatestInitiative(ArrayList<EntityWidget> entities){
+        EntityWidget greatestInitiative = entities.get(0);
+        for(int i = 1; i < entities.size(); i++){
+            EntityWidget entity = (EntityWidget)entities.get(i);
+            if (entity.getInitiative() > greatestInitiative.getInitiative()){
+                greatestInitiative = entity;
             }
         }  
 

@@ -18,12 +18,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import tech.jimothy.db.DataShare;
 import tech.jimothy.db.Database;
+import tech.jimothy.db.DatabaseConfig;
 import tech.jimothy.design.Entity;
 import tech.jimothy.design.ItemType;
 import tech.jimothy.errors.TableNotFoundException;
 import tech.jimothy.errors.WidgetMissingChildException;
 
-//TODO: Consider refactoring code to no longer use 'Entity' class as character representation in ViewLists
 /**
  * Widget is a reusable javafx component for searching items in a specified database table and selecting those items.
  * @author Timothy Newton
@@ -77,7 +77,7 @@ public class SearchAndSelectWidget extends VBox{
         this.getChildren().add(button);
 
         populateItems(itemType);
-        this.button.setOnAction(event -> {setButtonFunction();});
+        this.button.setOnAction(event -> {setDefaultButtonFunction(itemType);});
     }
 
     public SearchAndSelectWidget(ItemType itemType) {
@@ -110,7 +110,7 @@ public class SearchAndSelectWidget extends VBox{
         this.getChildren().add(button);
 
         populateItems(itemType);
-        this.button.setOnAction(event -> {setButtonFunction();});
+        this.button.setOnAction(event -> {setDefaultButtonFunction(itemType);});
     }
 
     public void setHasButton(boolean hasButton){
@@ -149,40 +149,39 @@ public class SearchAndSelectWidget extends VBox{
     /**
      * Sets the default functionality of the button.
      */
-    private void setButtonFunction(){
-        Database database = new Database("./sqlite/inibase");
+    private void setDefaultButtonFunction(ItemType itemType){
+
+        Database database = new Database(DatabaseConfig.URL);
         int currentCampaignID = DataShare.getInstance()
                                          .getInt();
         String currentCampaignName = database.query("SELECT name FROM campaigns")
                                              .get(currentCampaignID-1, "name");
 
 
-        for(Object character : getSelections()){
+        for(Object entity : getSelections()){
             boolean alreadyAdded = false;
-            //System.out.println(character.getID());
             try {
-                //System.out.println("Updating database...");
-                if(character instanceof Entity){
-                    database.modify("UPDATE characters SET " + 
+                if(entity instanceof Entity){
+                    database.modify("UPDATE entities SET " + 
                                     currentCampaignName + " = 1 WHERE id = " + 
-                                    ((Entity)character).getID());
-                    for(Node characterWidget : this.associatedPane.getChildren()){
-                        if (((CharacterWidget)characterWidget).getID() == ((Entity)character).getID()){
+                                    ((Entity)entity).getID());
+                    for(Node entityWidget : this.associatedPane.getChildren()){
+                        if (((EntityWidget)entityWidget).getID() == ((Entity)entity).getID()){
                             alreadyAdded = true;
                         }
                     }                    
                 }
 
 
-                if(!alreadyAdded && character instanceof Entity){
+                if(!alreadyAdded && entity instanceof Entity){
                     
-                    //add new characterwidget to charactersVBox
+                    //add new entitywidget to entitiesVBox
                     this.associatedPane.getChildren().add(
-                        new OptionCharacterWidget(
-                                                   (Entity)character,
+                        new OptionEntityWidget(
+                                                   (Entity)entity,
                                                     10));
                 } else{
-                    ; //? Add warning message animation thing here for when user adds a dupe character maybe?
+                    ; //? Add warning message animation thing here for when user adds a dupe entity maybe?
                 }
                 
             } catch (SQLException e) {

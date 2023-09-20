@@ -11,18 +11,18 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.VBox;
 import tech.jimothy.db.DataShare;
 import tech.jimothy.design.Effect;
-import tech.jimothy.design.EffectItem;
+import tech.jimothy.design.EffectItemType;
 import tech.jimothy.design.Observable;
 import tech.jimothy.design.ObservableInt;
 import tech.jimothy.design.Observer;
 import tech.jimothy.errors.StageNotSetForNav;
 import tech.jimothy.errors.WidgetMissingChildException;
-import tech.jimothy.gui.custom.CharacterWidget;
+import tech.jimothy.gui.custom.EntityWidget;
 import tech.jimothy.gui.custom.EffectWidget;
-import tech.jimothy.gui.custom.OptionCharacterWidget;
+import tech.jimothy.gui.custom.OptionEntityWidget;
 import tech.jimothy.gui.custom.SearchAndSelectWidget;
 import tech.jimothy.gui.nav.Nav;
-import tech.jimothy.utils.CharacterSortTools;
+import tech.jimothy.utils.EntitySortTools;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import java.util.ArrayList;
 public class CombatController{
 
     @FXML Parent root;
-    @FXML VBox charactersContainer;
+    @FXML VBox entitiesContainer;
     @FXML Label roundsLabel;
     @FXML Label timeLabel;
     @FXML private VBox effectsView;
@@ -42,10 +42,10 @@ public class CombatController{
     ObservableInt observableTime = new ObservableInt(0);
     //the amount of turns that have taken place
     int turns = 0;
-    //character with the current largest initiative
-    CharacterWidget topOfList;
-    //Character that is being focused on for the purpose of viewing effects/properties
-    CharacterWidget focusedCharacter;
+    //entity with the current largest initiative
+    EntityWidget topOfList;
+    //entity that is being focused on for the purpose of viewing effects/properties
+    EntityWidget focusedEntity;
     //Indicates whether ot not the AddEffectsWidget currently exists
     boolean addEffectsWidgetExists = false;
 
@@ -56,65 +56,67 @@ public class CombatController{
     @FXML
     protected void initialize(){
 
-        //config VBox for characters
-        charactersContainer.setSpacing(5.0);
+        //config VBox for entities
+        entitiesContainer.setSpacing(5.0);
 
-        //get the array of character widgets passed stored in our datashare singleton class
+        //get the array of entity widgets passed stored in our datashare singleton class
         DataShare dataShare = DataShare.getInstance();
-        ArrayList<Object> characterObjects = dataShare.getArray();
+        ArrayList<Object> entityObjects = dataShare.getArray();
 
-        ArrayList<CharacterWidget> characters = new ArrayList<>();
-        //convert our characterObjects back into CharacterWidgets, storing them in characters ArrayList
-        for(Object characterObj : characterObjects){
-            if (characterObj instanceof CharacterWidget){
-                characters.add((CharacterWidget)characterObj);
+        ArrayList<EntityWidget> entities = new ArrayList<>();
+        //convert our entityObjects back into EntityWidgets, storing them in entities ArrayList
+        for(Object entityObj : entityObjects){
+            if (entityObj instanceof EntityWidget){
+                entities.add((EntityWidget)entityObj);
             }
         }
-        //sort the characters in descending order based on their initiative
-        ArrayList<CharacterWidget> sortedCharacters = CharacterSortTools.charSortDesc(characters);
+        //sort the entities in descending order based on their initiative
+        ArrayList<EntityWidget> sortedEntities = EntitySortTools.charSortDesc(entities);
 
-        //Add characters to their VBox container, configuring them as needed
-        for (CharacterWidget character : sortedCharacters){
+        //Add entities to their VBox container, configuring them
+        for (EntityWidget entity : sortedEntities){
             //set on click to populate effects and properties view
-            character.setOnMouseClicked(event -> {
-                //if a character has been selected in the past, reset its style.
-                if(this.focusedCharacter != null){
+            entity.setOnMouseClicked(event -> {
+                //if a entity has been selected in the past, reset its style.
+                if(this.focusedEntity != null){
                     //? Find a way to not append the CSS?
-                    this.focusedCharacter.setStyle(character.getStyle() + "; -fx-border-width: 1px; -fx-border-color: Black;");
+                    this.focusedEntity.setStyle(entity.getStyle() + "; -fx-border-width: 1px; -fx-border-color: Black;");
                 }
-                //highlight the border of the character and set it as the focused character
-                character.setStyle(character.getStyle() + "; -fx-border-width: 3px; -fx-border-color: Blue;");
-                this.focusedCharacter = character;
+                //highlight the border of the entity and set it as the focused entity
+                entity.setStyle(entity.getStyle() + "; -fx-border-width: 3px; -fx-border-color: Blue;");
+                this.focusedEntity = entity;
 
                 //populate the views
                 populateEffectsView();
                 populatePropertiesView();
             });
 
-            //create new 'add effect' menu option for character widget
+            //create new 'add effect' menu option for entity widget
             MenuItem addEffectsOption = new MenuItem("Add Effect");
             //set the action for the new menu option
-            addEffectsOption.setOnAction(event -> {manifestAddEffectsWidget(character);});
-            ((OptionCharacterWidget)character).getOptionsMenu().getItems().add(addEffectsOption);
+            addEffectsOption.setOnAction(event -> {manifestAddEffectsWidget(entity);});
+            ((OptionEntityWidget)entity).getOptionsMenu().getItems().add(addEffectsOption);
 
-            character.getChildren().add(new Label("Init: " + String.valueOf(character.getInitiative())));
-            charactersContainer.getChildren().add(character);
+            entity.getChildren().add(new Label("Init: " + String.valueOf(entity.getInitiative())));
+            entitiesContainer.getChildren().add(entity);
         }
-        //Set the character that is at the top of turn order
-        this.topOfList = CharacterSortTools.greatestInitiative(this.charactersContainer.getChildren());
+        //Set the entity that is at the top of turn order
+        this.topOfList = EntitySortTools.greatestInitiative(this.entitiesContainer.getChildren());
 
-        //Set this first character as the character being focused on and then populate the views for that character
-        this.focusedCharacter = this.topOfList;
-        this.focusedCharacter.setStyle(this.focusedCharacter.getStyle() + "; -fx-border-width: 3px; -fx-border-color: Blue;");
+        //Set this first entity as the entity being focused on and then populate the views for that entity
+        this.focusedEntity = this.topOfList;
+        this.focusedEntity.setStyle(this.focusedEntity.getStyle() + "; -fx-border-width: 3px; -fx-border-color: Blue;");
         populateEffectsView();
     }
 
-    private void manifestAddEffectsWidget(CharacterWidget assocChar){
+    private void manifestAddEffectsWidget(EntityWidget assocEntity){
 
         if(!this.addEffectsWidgetExists){
             this.addEffectsWidgetExists = true;
 
-            SearchAndSelectWidget addEffectsWidget = new SearchAndSelectWidget(new EffectItem());
+            SearchAndSelectWidget addEffectsWidget = new SearchAndSelectWidget(new EffectItemType());
+            //set addEffectsWidget height
+            addEffectsWidget.setMinHeight(.5*this.mainView.getHeight());
             try{
                 addEffectsWidget.setOnButtonPress(event -> {
                     for(Object effectObj : addEffectsWidget.getSelections()){
@@ -125,16 +127,16 @@ public class CombatController{
                             observableTime.registerObserver(effect);
                             
                             //add an effect widget to the effects view IF this char is currently the one focused on
-                            //AND the associated character widget does not currently have an instance of the effect already(compare effect id)
-                            if(!assocChar.hasEffect(effect.getID())){
-                                if (assocChar.equals(this.focusedCharacter)){
-                                    EffectWidget effectWidget = new EffectWidget(effect, assocChar);
+                            //AND the associated entity widget does not currently have an instance of the effect already(compare effect id)
+                            if(!assocEntity.hasEffect(effect.getID())){
+                                if (assocEntity.equals(this.focusedEntity)){
+                                    EffectWidget effectWidget = new EffectWidget(effect, assocEntity);
 
 
                                     this.effectsView.getChildren().add(effectWidget);
                                 }
-                                //add effect to the character which is associated with this addEffectsWidget
-                                assocChar.addEffect(effect);
+                                //add effect to the entity which is associated with this addEffectsWidget
+                                assocEntity.addEffect(effect);
                             }
                          }
                     }
@@ -149,16 +151,16 @@ public class CombatController{
     }
 
     public void cycle(ActionEvent event){
-        ObservableList<Node> characters = charactersContainer.getChildren();
-        Node first = characters.get(0);
+        ObservableList<Node> entities = entitiesContainer.getChildren();
+        Node first = entities.get(0);
 
-        //character with greatest initiative will be the marker for each new round
-        topOfList = CharacterSortTools.greatestInitiative(characters);
+        //entity with greatest initiative will be the marker for each new round
+        topOfList = EntitySortTools.greatestInitiative(entities);
 
-        characters.remove(0);
-        characters.add(first);
+        entities.remove(0);
+        entities.add(first);
 
-        if (characters.indexOf(topOfList) == 0){
+        if (entities.indexOf(topOfList) == 0){
             this.rounds += 1;
 
             String[] temp = roundsLabel.getText().split(" ");
@@ -194,14 +196,11 @@ public class CombatController{
         //remove previous population
         this.effectsView.getChildren().removeAll(this.effectsView.getChildren());
 
-        ArrayList<Effect> charEffects = this.focusedCharacter.getEffects();
+        ArrayList<Effect> charEffects = this.focusedEntity.getEffects();
 
         for (Effect effect : charEffects){
-            System.out.println(effect.getName());
-            EffectWidget effectWidget = new EffectWidget(effect, this.focusedCharacter);
+            EffectWidget effectWidget = new EffectWidget(effect, this.focusedEntity);
 
-            //add padding to effect widget to create space between widgets
-            effectWidget.setPadding(new Insets(0, 0, 10, 0));
             this.effectsView.getChildren().add(effectWidget);
 
         }
