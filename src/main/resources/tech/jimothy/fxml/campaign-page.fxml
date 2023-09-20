@@ -47,7 +47,7 @@
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#goToCreateCampaign" text="New Campaign" />
               <MenuItem mnemonicParsing="false" onAction="#goToCreateCharacter" text="New Character" />
-                  <MenuItem mnemonicParsing="false" text="New Monster" />
+                  <MenuItem mnemonicParsing="false" onAction="#goToCreateMonster" text="New Monster" />
                   <MenuItem mnemonicParsing="false" onAction="#goToCreateEffect" text="New Effect" />
             </items>
           </Menu>
