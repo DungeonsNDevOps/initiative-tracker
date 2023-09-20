@@ -14,8 +14,9 @@ public class EntityList {
             int id = Integer.valueOf(table.get(i, "id"));
             String name = table.get(i, "name");
             int bonus = Integer.valueOf(table.get(i, "bonus"));
+            String type = table.get(i, "type");
 
-            entityList.add(i, new Entity(id, name, bonus));
+            entityList.add(i, new Entity(id, name, bonus, type));
         }
     }
 
