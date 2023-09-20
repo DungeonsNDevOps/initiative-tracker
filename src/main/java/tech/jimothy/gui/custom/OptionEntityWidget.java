@@ -2,6 +2,7 @@ package tech.jimothy.gui.custom;
 
 import tech.jimothy.db.DataShare;
 import tech.jimothy.db.Database;
+import tech.jimothy.db.DatabaseConfig;
 import tech.jimothy.db.Table;
 import tech.jimothy.design.Entity;
 
@@ -11,18 +12,19 @@ import java.sql.SQLException;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 
-public class OptionCharacterWidget extends CharacterWidget {
+public class OptionEntityWidget extends EntityWidget {
 
     private MenuItem killButton;
     /**Options menu button */
     MenuButton optionsMenu;
     
-    public OptionCharacterWidget( 
+    public OptionEntityWidget( 
                            int spacing, 
                            String name, 
                            int bonus, 
-                           int ID){
-        super(spacing, name, bonus, ID);
+                           int ID,
+                           String type){
+        super(spacing, name, bonus, ID, type);
         //Create vbox for buttons
         this.optionsMenu = new MenuButton("Options");
 
@@ -37,7 +39,7 @@ public class OptionCharacterWidget extends CharacterWidget {
         this.getChildren().add(this.optionsMenu);
     }
 
-    public OptionCharacterWidget(
+    public OptionEntityWidget(
                            Entity soul, 
                            int spacing){
                             
@@ -54,15 +56,15 @@ public class OptionCharacterWidget extends CharacterWidget {
         this.getChildren().add(this.optionsMenu);
     }
 
-    //Method for 'killing' the character
+    //Method for 'killing' the entities
     private void kill(){
-        Database database = new Database("./sqlite/inibase");
+        Database database = new Database(DatabaseConfig.URL);
         Table campaignTable = database.query("SELECT * FROM campaigns");
         DataShare campaignData = DataShare.getInstance();
         int campaignID = campaignData.getInt();
         String campaignName = campaignTable.get(campaignID-1, "name");
         try {
-            database.modify("UPDATE characters SET " + 
+            database.modify("UPDATE entities SET " + 
                             campaignName + " = 0 WHERE id = " 
                             + this.getID());
         } catch (SQLException e) {

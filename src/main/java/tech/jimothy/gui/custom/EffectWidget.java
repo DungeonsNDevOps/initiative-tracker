@@ -1,6 +1,5 @@
 package tech.jimothy.gui.custom;
 
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,7 +10,6 @@ import javafx.scene.text.Font;
 import tech.jimothy.design.Effect;
 import tech.jimothy.design.Observable;
 import tech.jimothy.design.Observer;
-import javafx.scene.layout.Region;
 
 public class EffectWidget extends Pane implements Observer{
     
@@ -19,7 +17,7 @@ public class EffectWidget extends Pane implements Observer{
     private ImageView icon;
     private Label name;
     private Button deleteButton;
-    private CharacterWidget associatedChar;
+    private EntityWidget associatedChar;
 
     private HBox innerContainer;
 
@@ -30,7 +28,7 @@ public class EffectWidget extends Pane implements Observer{
         this.associatedChar = null;
     }
 
-    public EffectWidget(Effect effect, CharacterWidget associatedChar){
+    public EffectWidget(Effect effect, EntityWidget associatedChar){
         this.effect = effect;
         this.associatedChar = associatedChar;
 
@@ -70,7 +68,7 @@ public class EffectWidget extends Pane implements Observer{
     private void setDeleteFunc(){
         //set what happens when button is pressed
         this.deleteButton.setOnAction(event -> {
-            //remove the effect from the associated character
+            //remove the effect from the associated entity
             this.associatedChar.removeEffect(this.effect.getID());
             if (this.getParent() instanceof Pane){
                 //remove this effect widget from the parent

@@ -13,40 +13,43 @@ import tech.jimothy.design.Observable;
 import tech.jimothy.design.Observer;
 
 /**
- * A javafx component or 'widget' that is for displaying character/monster data.
- * This is the base for all other character widget classes.
- * CharacterWidget can be thought of as a complete representation of a character/monster.
+ * A javafx component or 'widget' that is for displaying entity data.
+ * This is the base for all other entity widget classes.
+ * entityWidget can be thought of as a complete representation of an entity.
  * It contains not only the code necessary to display information within the GUI but data
- * about the character as well. 
+ * about the entity as well. 
  */
 
-public class CharacterWidget extends HBox implements Observer{
+public class EntityWidget extends HBox implements Observer{
 
-    /**Name of the character */
+    /**Name of the entity */
     private String name;
-    /**The character's unique ID */
+    /**The entity's unique ID */
     private int id;
-    /**The character's initiative bonus */
+    /**The entity's initiative bonus */
     private int bonus; 
-    /**The character's initiative */
+    /**The entity's type ('player', 'npc', 'monster')*/
+    private String type;
+    /**The entity's initiative */
     private int initiative;
-    /**The effects the character is currently under */
+    /**The effects the entity is currently under */
     private ArrayList<Effect> effects = new ArrayList<>();
-    /**The character's effect immunities */
+    /**The entity's effect immunities */
     private ArrayList<Effect> immunities = new ArrayList<>();
 
     /**Remember that this is the current effect needing to be removed. 
-     * CharacterWidget takes a look at this whenever the Observer.update() method is called
+     * entityWidget takes a look at this whenever the Observer.update() method is called
      * It is set by Observer.registerObservable()
      * It will change depending on which effect is currely notifying this Observer
      */
     Observable effectReadyForRemoval;
 
-    public CharacterWidget(){
+    public EntityWidget(){
 
         this.name = null;
         this.id = 0;
         this.bonus = 0;
+        this.type = null;
 
         //Configuration
         this.setStyle("-fx-background-color: #AEB6B7;"+
@@ -54,13 +57,13 @@ public class CharacterWidget extends HBox implements Observer{
                       );
 
         /*Make Children */
-        Label characterNameLabel = new Label(name);
+        Label entityNameLabel = new Label(name);
 
         //Create blank in between label and button
         Region blankSpace = new Region();
         HBox.setHgrow(blankSpace, Priority.ALWAYS);
 
-        this.getChildren().add(characterNameLabel);
+        this.getChildren().add(entityNameLabel);
         this.getChildren().add(blankSpace);
 
         
@@ -69,16 +72,17 @@ public class CharacterWidget extends HBox implements Observer{
 
 
     /**
-     * Constructor takes an Entity object and gets the character's data from it. 
+     * Constructor takes an Entity object and gets the entity's data from it. 
      * @param soul The essence of this class; Rather, all the important data is
      * extracted from this object. 
      */
-    public CharacterWidget(Entity soul, int spacing){
+    public EntityWidget(Entity soul, int spacing){
         super(spacing);
 
         this.name = soul.toString();
         this.id = soul.getID();
         this.bonus = soul.getBonus();
+        this.type = soul.getType();
 
         //Configuration
         this.setStyle("-fx-background-color: #AEB6B7;"+
@@ -86,26 +90,28 @@ public class CharacterWidget extends HBox implements Observer{
                       );
 
         /*Make Children */
-        Label characterNameLabel = new Label(name);
+        Label entityNameLabel = new Label(name);
 
         //Create blank in between label and button
         Region blankSpace = new Region();
         HBox.setHgrow(blankSpace, Priority.ALWAYS);
 
-        this.getChildren().add(characterNameLabel);
+        this.getChildren().add(entityNameLabel);
         this.getChildren().add(blankSpace);
 
     }
 
-    public CharacterWidget(int spacing, 
+    public EntityWidget(int spacing, 
                            String name, 
                            int bonus, 
-                           int id){
+                           int id,
+                           String type){
         super(spacing);
         
         this.name = name;
         this.id = id;
         this.bonus = bonus;
+        this.type = type;
 
         //Configuration
         this.setStyle("-fx-background-color: #AEB6B7;"+
@@ -113,13 +119,13 @@ public class CharacterWidget extends HBox implements Observer{
                       );
 
         /*Make Children */
-        Label characterNameLabel = new Label(name);
+        Label entityNameLabel = new Label(name);
 
         //Create blank in between label and rest of children
         Region blankSpace = new Region();
         HBox.setHgrow(blankSpace, Priority.ALWAYS);
 
-        this.getChildren().add(characterNameLabel);
+        this.getChildren().add(entityNameLabel);
         this.getChildren().add(blankSpace);
 
     }
@@ -142,6 +148,10 @@ public class CharacterWidget extends HBox implements Observer{
 
     public int getBonus(){
         return this.bonus;
+    }
+
+    public String getType(){
+        return this.type;
     }
 
     public int getInitiative(){
@@ -172,7 +182,7 @@ public class CharacterWidget extends HBox implements Observer{
         if(!alreadyContains){
             this.effects.add(effect);
 
-            //register this character widget as an observer of the effect
+            //register this entity widget as an observer of the effect
             effect.registerObserver(this);
         } else {
             ; //TODO: Create custom exception for when a duplicate effect has been attempted
@@ -222,7 +232,7 @@ public class CharacterWidget extends HBox implements Observer{
     }
 
     /**
-     * Removes an effect from the character based on the given id
+     * Removes an effect from the entity based on the given id
      * @param id id of effect to remove
      */
     public void removeEffect(int id){
