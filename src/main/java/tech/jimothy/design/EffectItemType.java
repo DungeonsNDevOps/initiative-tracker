@@ -2,12 +2,13 @@ package tech.jimothy.design;
 
 import javafx.scene.control.ListView;
 import tech.jimothy.db.Database;
+import tech.jimothy.db.DatabaseConfig;
 import tech.jimothy.db.Table;
 
-public class EffectItem implements ItemType{
+public class EffectItemType implements ItemType{
     @Override
     public void populateItems(ListView<Object> listView){
-        Database database = new Database("./sqlite/inibase");
+        Database database = new Database(DatabaseConfig.URL);
 
         Table itemsTable = database.query("SELECT * FROM effects");
         
