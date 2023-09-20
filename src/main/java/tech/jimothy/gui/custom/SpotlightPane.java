@@ -40,7 +40,6 @@ public class SpotlightPane extends Pane{
         super();
         this.gap = gap;
         this.widthFactor = widthFactor;
-        this.setStyle("-fx-border-style: dotted; -fx-border-width: 2px;");
         //ensure that when the  user clicks on this node, input focus
         //is set for this node. This is important for future
         //input event handling within this node.
@@ -97,6 +96,8 @@ public class SpotlightPane extends Pane{
                 childIndex += 1;
             }
             layoutChildrenCount += 1;
+
+            this.spotlightChild = children.get(0);
         }
     }
     /**
@@ -263,6 +264,10 @@ public class SpotlightPane extends Pane{
 
     public int getSpotlightIndex(){
         return this.spotlightIndex;
+    }
+
+    public Node getSpotlightChild(){
+        return this.spotlightChild;
     }
 }
 
