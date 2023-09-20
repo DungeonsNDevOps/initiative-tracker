@@ -13,7 +13,7 @@
             <Font name="Book Antiqua" size="36.0" />
          </font>
       </Label>
-      <TextField fx:id="campaignTextField" layoutX="273.0" layoutY="176.0" />
+      <TextField fx:id="nameTextField" layoutX="273.0" layoutY="176.0" />
       <Label layoutX="319.0" layoutY="141.0" text="Name">
          <font>
             <Font name="Book Antiqua" size="24.0" />
@@ -27,5 +27,6 @@
       <Button layoutX="301.0" layoutY="447.0" mnemonicParsing="false" onAction="#createCampaign" prefHeight="30.0" prefWidth="101.0" text="Create" />
       <Label fx:id="warningLabel" layoutX="259.0" layoutY="211.0" text="Campaign name already exists." textFill="#eb0000" visible="false" />
       <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
+      <Label fx:id="nameWarningLabel" alignment="CENTER" layoutX="274.0" layoutY="212.0" prefHeight="18.0" prefWidth="152.0" textFill="RED" />
    </children>
 </AnchorPane>

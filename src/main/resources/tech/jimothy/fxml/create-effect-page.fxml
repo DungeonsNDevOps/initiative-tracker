@@ -34,5 +34,8 @@
       </Label>
       <TextField fx:id="durationTextField" layoutX="276.0" layoutY="612.0" />
       <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
+      <Label fx:id="nameWarningLabel" alignment="CENTER" layoutX="275.0" layoutY="226.0" prefHeight="18.0" prefWidth="152.0" textFill="RED" />
+      <Label fx:id="descWarningLabel" alignment="CENTER" layoutX="277.0" layoutY="535.0" prefHeight="18.0" prefWidth="152.0" textFill="RED" />
+      <Label fx:id="durationWarningLabel" alignment="CENTER" layoutX="258.0" layoutY="653.0" prefHeight="18.0" prefWidth="191.0" textFill="RED" />
    </children>
 </AnchorPane>
