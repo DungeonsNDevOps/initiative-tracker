@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import tech.jimothy.db.Database;
+import tech.jimothy.db.DatabaseConfig;
 import tech.jimothy.db.Table;
 import tech.jimothy.errors.StageNotSetForNav;
 import tech.jimothy.gui.nav.Nav;
@@ -16,6 +17,8 @@ public class CampaignController {
      
     @FXML private Parent root;
     @FXML VBox campaignsVBox;
+
+//*----------------------------------------Navigation--------------------------------------------- */
 
     /**The navigation object used to naviagting around the app */
     Nav navigation = Nav.getInstance();
@@ -58,10 +61,23 @@ public class CampaignController {
         });
     }
 
+    public void goToCreateMonster(ActionEvent event) throws IOException, StageNotSetForNav{
+        navigation.goToCreateMonster();
+        navigation.setLastPage(() -> {
+            try {
+                navigation.goToCampaignPage();
+            } catch (IOException | StageNotSetForNav e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+//*--------------------------------------------------------------------------------------------- */
+
 
     @FXML
     protected void initialize(){
-        Database database = new Database("./sqlite/inibase");
+        Database database = new Database(DatabaseConfig.URL);
         Table campaignsTable = database.query("SELECT * FROM campaigns");
         
         campaignsVBox.setSpacing(50.0);
