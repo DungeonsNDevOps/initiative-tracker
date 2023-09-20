@@ -41,9 +41,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="root" prefHeight="439.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.jimothy.gui.CombatController">
+<VBox fx:id="root" prefHeight="585.0" prefWidth="647.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.jimothy.gui.CombatController">
   <children>
-      <SplitPane dividerPositions="0.7460815047021944" prefHeight="378.0" prefWidth="640.0">
+      <SplitPane dividerPositions="0.7460815047021944" prefHeight="549.0" prefWidth="647.0">
          <items>
             <VBox fx:id="mainView" prefHeight="200.0" prefWidth="100.0">
                <children>
@@ -52,9 +52,9 @@
                         <Font size="30.0" />
                      </font>
                   </Label>
-                  <ScrollPane prefHeight="306.0" prefWidth="473.0">
+                  <ScrollPane prefHeight="468.0" prefWidth="478.0">
                      <content>
-                        <VBox fx:id="charactersContainer" prefHeight="304.0" prefWidth="471.0">
+                        <VBox fx:id="entitiesContainer" prefHeight="304.0" prefWidth="471.0">
                            <padding>
                               <Insets left="50.0" right="50.0" />
                            </padding></VBox>
@@ -72,12 +72,12 @@
                <items>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="182.0" text="Effects">
+                        <Label alignment="CENTER" prefHeight="67.0" prefWidth="161.0" text="Effects">
                            <font>
                               <Font size="19.0" />
                            </font>
                         </Label>
-                        <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                        <ScrollPane prefHeight="243.0" prefWidth="161.0">
                            <content>
                               <VBox fx:id="effectsView" prefHeight="154.0" prefWidth="157.0" />
                            </content>
@@ -86,12 +86,12 @@
                   </VBox>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="182.0" text="Properties">
+                        <Label alignment="CENTER" prefHeight="46.0" prefWidth="161.0" text="Properties">
                            <font>
                               <Font size="19.0" />
                            </font>
                         </Label>
-                        <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                        <ScrollPane prefHeight="212.0" prefWidth="161.0">
                            <content>
                               <VBox prefHeight="153.0" prefWidth="157.0" />
                            </content>
@@ -102,16 +102,16 @@
             </SplitPane>
          </items>
       </SplitPane>
-      <HBox prefHeight="61.0" prefWidth="640.0">
+      <HBox prefHeight="27.0" prefWidth="647.0">
          <children>
             <Button mnemonicParsing="false" onAction="#endCombat" prefHeight="61.0" prefWidth="327.0" text="End Combat">
                <font>
-                  <Font size="25.0" />
+                  <Font size="19.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" onAction="#cycle" prefHeight="80.0" prefWidth="308.0" text="Cycle">
+            <Button mnemonicParsing="false" onAction="#cycle" prefHeight="52.0" prefWidth="317.0" text="Cycle">
                <font>
-                  <Font size="25.0" />
+                  <Font size="19.0" />
                </font>
             </Button>
          </children>
