@@ -50,7 +50,7 @@
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#goToCreateCampaign" text="New Campaign" />
               <MenuItem mnemonicParsing="false" onAction="#goToCreateCharacter" text="New Character" />
-                  <MenuItem mnemonicParsing="false" text="New Monster" />
+                  <MenuItem mnemonicParsing="false" onAction="#goToCreateMonster" text="New Monster" />
                   <MenuItem mnemonicParsing="false" onAction="#goToCreateEffect" text="New Effect" />
             </items>
           </Menu>
@@ -65,15 +65,15 @@
          <children>
             <ScrollPane fx:id="campaignScrollPane" prefHeight="313.0" prefWidth="640.0">
                <content>
-                  <VBox fx:id="charactersVBox" alignment="TOP_CENTER" prefHeight="291.0" prefWidth="638.0" spacing="20.0">
+                  <VBox fx:id="entityVBox" alignment="TOP_CENTER" prefHeight="291.0" prefWidth="638.0" spacing="20.0">
                      <padding>
                         <Insets left="100.0" right="100.0" top="10.0" />
                      </padding></VBox>
                </content></ScrollPane>
             <HBox prefHeight="62.0" prefWidth="640.0" AnchorPane.bottomAnchor="0.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#addCharacter" prefHeight="62.0" prefWidth="217.0" text="Add Character" />
-                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="237.0" text="Add Monster" />
+                  <Button mnemonicParsing="false" onAction="#manifestAddCharacterWidget" prefHeight="62.0" prefWidth="217.0" text="Add Character" />
+                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#manifestAddMonsterWidget" prefHeight="62.0" prefWidth="237.0" text="Add Monster" />
                   <Button layoutX="217.0" layoutY="10.0" mnemonicParsing="false" onAction="#goToPreliminaryCombatPage" prefHeight="62.0" prefWidth="208.0" text="Start Combat" />
                </children>
             </HBox>
