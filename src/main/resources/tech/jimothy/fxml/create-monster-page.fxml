@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="519.0" prefWidth="694.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.jimothy.gui.CreateMonsterController">
+   <children>
+      <Label layoutX="228.0" layoutY="44.0" text="Create Monster">
+         <font>
+            <Font name="Book Antiqua" size="36.0" />
+         </font>
+      </Label>
+      <TextField fx:id="monsterNameField" layoutX="273.0" layoutY="176.0" />
+      <Label layoutX="319.0" layoutY="141.0" text="Name">
+         <font>
+            <Font name="Book Antiqua" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="318.0" layoutY="250.0" text="Bonus">
+         <font>
+            <Font name="Book Antiqua" size="24.0" />
+         </font>
+      </Label>
+      <TextField fx:id="monsterBonusField" layoutX="276.0" layoutY="294.0" />
+      <Button layoutX="323.0" layoutY="382.0" mnemonicParsing="false" onAction="#createMonster" text="Create" />
+      <Label fx:id="bonusWarningLabel" alignment="CENTER" layoutX="276.0" layoutY="341.0" prefHeight="18.0" prefWidth="152.0" textFill="RED" />
+      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
+      <Label fx:id="nameWarningLabel" alignment="CENTER" layoutX="274.0" layoutY="211.0" prefHeight="18.0" prefWidth="152.0" textFill="RED" />
+   </children>
+</AnchorPane>
