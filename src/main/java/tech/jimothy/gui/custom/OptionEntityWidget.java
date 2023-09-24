@@ -63,13 +63,35 @@ public class OptionEntityWidget extends EntityWidget {
         DataShare campaignData = DataShare.getInstance();
         int campaignID = campaignData.getInt();
         String campaignName = campaignTable.get(campaignID-1, "name");
-        try {
-            database.modify("UPDATE entities SET " + 
-                            campaignName + " = 0 WHERE id = " 
-                            + this.getID());
-        } catch (SQLException e) {
-            e.printStackTrace();
+
+        String entityType = this.getType();
+
+        if (entityType.equals("monster")){
+            int storedMonsterQuantity = Integer.valueOf(database.query("SELECT " + campaignName + 
+            " FROM entities WHERE id = " + this.getID()).get(0, campaignName));
+            //subtract 1 from this monster's quantity
+            int newMonsterQuantity = storedMonsterQuantity - 1; 
+
+            //update the db with the new quantity
+            try {
+                database.modify("UPDATE entities SET " + 
+                                campaignName + " = " + 
+                                newMonsterQuantity + 
+                                " WHERE id = " + this.getID()
+                );
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                database.modify("UPDATE entities SET " + 
+                                campaignName + " = 0 WHERE id = " 
+                                + this.getID());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+
         this.getContainer().getChildren().remove(this);
     }
 
