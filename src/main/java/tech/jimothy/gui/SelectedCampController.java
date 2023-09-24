@@ -154,21 +154,43 @@ public class SelectedCampController {
         Table campaignsTable = database.query("SELECT * FROM campaigns");
         String campaignName = campaignsTable.get(campaignID - 1, "name");
         Table entitiesTable = database.query("SELECT * FROM entities WHERE " +
-                                                campaignName + " = 1");
+                                                campaignName + " >= 1");
         
         for (int i = 0; i < entitiesTable.getSize(); i++){
             String entityName = entitiesTable.get(i, "name");
             int entityBonus = Integer.valueOf(entitiesTable.get(i, "bonus"));
             int entityID = Integer.valueOf(entitiesTable.get(i, "id"));
             String entityType = entitiesTable.get(i, "type");
-            OptionEntityWidget character = new OptionEntityWidget(20, 
+
+            //if entity type is monster, add the quantity indicated in the db
+            if (entityType.equals("monster")){
+                //get the quantity of the particular monster stored
+                int storedMonsterQuantity = Integer.valueOf(database.query("SELECT " + campaignName + 
+                " FROM entities WHERE id = " + entityID).get(0, campaignName));
+
+                //add a particular monster for the quantity specified in the db
+                for (int ii = 0; ii < storedMonsterQuantity; ii++){
+
+                    OptionEntityWidget entity = new OptionEntityWidget(20, 
                                                             entityName, 
                                                             entityBonus,
                                                             entityID,
                                                             entityType
                                                             );
-            character.setPrefWidth(100);
-            this.entityVBox.getChildren().add(character);
+                    entity.setPrefWidth(100);
+                    this.entityVBox.getChildren().add(entity);
+                }
+            } else { //else just add one of the particular entity since it isn't a monster
+                OptionEntityWidget entity = new OptionEntityWidget(20, 
+                                                                entityName, 
+                                                                entityBonus,
+                                                                entityID,
+                                                                entityType
+                                                                );
+                entity.setPrefWidth(100);
+                this.entityVBox.getChildren().add(entity);
+            }
+
         }
         database.close();
     }
