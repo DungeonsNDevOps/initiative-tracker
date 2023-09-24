@@ -19,8 +19,10 @@ import javafx.scene.layout.VBox;
 import tech.jimothy.db.DataShare;
 import tech.jimothy.db.Database;
 import tech.jimothy.db.DatabaseConfig;
+import tech.jimothy.design.CharacterItemType;
 import tech.jimothy.design.Entity;
 import tech.jimothy.design.ItemType;
+import tech.jimothy.design.MonsterItemType;
 import tech.jimothy.errors.TableNotFoundException;
 import tech.jimothy.errors.WidgetMissingChildException;
 
@@ -35,6 +37,9 @@ public class SearchAndSelectWidget extends VBox{
     ListView<Object> itemListView = new ListView<>();
     Button button = new Button("Add");
     ObservableList<Object> itemList;
+
+    /** Used for quantifying how many monsters should be added at a time */ 
+    TextField monsterQuantityTextField; 
 
     /**The type of item that will be populated in the ViewList of this widget */
     ItemType itemType;
@@ -53,6 +58,8 @@ public class SearchAndSelectWidget extends VBox{
 
         this.associatedPane = associatedPane;
         this.itemType = itemType;
+
+        
 
         //Configuration
         this.setPrefHeight(250);
@@ -76,8 +83,19 @@ public class SearchAndSelectWidget extends VBox{
         this.getChildren().add(itemListView);
         this.getChildren().add(button);
 
-        populateItems(itemType);
-        this.button.setOnAction(event -> {setDefaultButtonFunction(itemType);});
+        /*
+         * If type of item is MonsterItemType, add a text field for the monster quantity and
+         * set the selection model mode as SINGLE for the ListView Component. 
+         */
+        if (this.itemType instanceof MonsterItemType){
+            this.monsterQuantityTextField = new TextField();
+            this.monsterQuantityTextField.setPromptText("Enter Quantity");
+            this.itemListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+            this.getChildren().add(2, monsterQuantityTextField);
+        }
+
+        populateItems();
+        this.button.setOnAction(event -> {setDefaultButtonFunction();});
     }
 
     public SearchAndSelectWidget(ItemType itemType) {
@@ -109,8 +127,19 @@ public class SearchAndSelectWidget extends VBox{
         this.getChildren().add(itemListView);
         this.getChildren().add(button);
 
-        populateItems(itemType);
-        this.button.setOnAction(event -> {setDefaultButtonFunction(itemType);});
+        /*
+         * If type of item is MonsterItemType, add a text field for the monster quantity and
+         * set the selection model mode as SINGLE for the ListView Component. 
+         */
+        if (this.itemType instanceof MonsterItemType){
+            this.monsterQuantityTextField = new TextField();
+            this.monsterQuantityTextField.setPromptText("Enter Quantity");
+            this.itemListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+            this.getChildren().add(2, monsterQuantityTextField);
+        }
+
+        populateItems();
+        this.button.setOnAction(event -> {setDefaultButtonFunction();});
     }
 
     public void setHasButton(boolean hasButton){
@@ -128,9 +157,8 @@ public class SearchAndSelectWidget extends VBox{
      * Method populates this widget's ListView component with items depending on the specified
      * item type. More specifically, the type will determine which table from the database to pull from
      * and what kind of object to place into the ViewList
-     * @param itemType The item type 
      */
-    private void populateItems(ItemType itemType){
+    private void populateItems(){
         itemType.populateItems(this.itemListView);
         this.itemList = this.itemListView.getItems();
     }
@@ -147,9 +175,10 @@ public class SearchAndSelectWidget extends VBox{
     }
     
     /**
-     * Sets the default functionality of the button.
+     * Sets the default functionality of the button. The default procedure is to add selected entities 
+     * to the associated Pane. 
      */
-    private void setDefaultButtonFunction(ItemType itemType){
+    private void setDefaultButtonFunction(){
 
         Database database = new Database(DatabaseConfig.URL);
         int currentCampaignID = DataShare.getInstance()
@@ -158,31 +187,57 @@ public class SearchAndSelectWidget extends VBox{
                                              .get(currentCampaignID-1, "name");
 
 
-        for(Object entity : getSelections()){
-            boolean alreadyAdded = false;
+        for(Object entityObj : getSelections()){
+            Entity entity = (Entity)entityObj; 
+
             try {
-                if(entity instanceof Entity){
+                //Check to see what type of entity we're dealing with
+                if (this.itemType instanceof CharacterItemType){
+                    boolean alreadyAdded = false;
+                    //Update db to indicate the character now exists within this campaign
                     database.modify("UPDATE entities SET " + 
                                     currentCampaignName + " = 1 WHERE id = " + 
-                                    ((Entity)entity).getID());
+                                    entity.getID());
+                    
+                    //Ensure that there isn'tan entity in the associated pane with a matching ID
                     for(Node entityWidget : this.associatedPane.getChildren()){
-                        if (((EntityWidget)entityWidget).getID() == ((Entity)entity).getID()){
+                        if (((EntityWidget)entityWidget).getID() == entity.getID()){
                             alreadyAdded = true;
                         }
-                    }                    
-                }
-
-
-                if(!alreadyAdded && entity instanceof Entity){
+                    }
                     
+                    if(!alreadyAdded){
                     //add new entitywidget to entitiesVBox
                     this.associatedPane.getChildren().add(
-                        new OptionEntityWidget(
-                                                   (Entity)entity,
-                                                    10));
-                } else{
-                    ; //? Add warning message animation thing here for when user adds a dupe entity maybe?
+                        new OptionEntityWidget((Entity)entity, 10)
+                        );
+                    } else{
+                        ; //? Add warning message animation thing here for when user adds a dupe entity maybe?
+                    }
+
+                } else if (this.itemType instanceof MonsterItemType){
+                    int storedMonsterQuantity = Integer.valueOf(
+                        database.query("SELECT " + currentCampaignName + " FROM entities" + 
+                        " WHERE id = " + entity.getID()).get(0, currentCampaignName)
+                    );
+
+                    int monsterQuantity = Integer.valueOf(this.monsterQuantityTextField.getText());
+
+                    //set the amount of monsters in the db
+                    database.modify("UPDATE entities SET " + currentCampaignName + " = " + 
+                    (monsterQuantity + storedMonsterQuantity) + " WHERE id = " + entity.getID());
+
+                    //add the amount of monsters desired to the associate pan
+                    for (int i = 0; i < monsterQuantity; i ++){
+                        this.associatedPane.getChildren().add(
+                            new OptionEntityWidget(entity, 10)
+                        );
+                    }
+
                 }
+
+
+
                 
             } catch (SQLException e) {
                 e.printStackTrace();
