@@ -25,6 +25,7 @@ import tech.jimothy.design.ItemType;
 import tech.jimothy.design.MonsterItemType;
 import tech.jimothy.errors.TableNotFoundException;
 import tech.jimothy.errors.WidgetMissingChildException;
+import tech.jimothy.utils.Integers;
 
 /**
  * Widget is a reusable javafx component for searching items in a specified database table and selecting those items.
@@ -216,23 +217,34 @@ public class SearchAndSelectWidget extends VBox{
                     }
 
                 } else if (this.itemType instanceof MonsterItemType){
-                    int storedMonsterQuantity = Integer.valueOf(
-                        database.query("SELECT " + currentCampaignName + " FROM entities" + 
-                        " WHERE id = " + entity.getID()).get(0, currentCampaignName)
-                    );
-
-                    int monsterQuantity = Integer.valueOf(this.monsterQuantityTextField.getText());
-
-                    //set the amount of monsters in the db
-                    database.modify("UPDATE entities SET " + currentCampaignName + " = " + 
-                    (monsterQuantity + storedMonsterQuantity) + " WHERE id = " + entity.getID());
-
-                    //add the amount of monsters desired to the associate pan
-                    for (int i = 0; i < monsterQuantity; i ++){
-                        this.associatedPane.getChildren().add(
-                            new OptionEntityWidget(entity, 10)
+                    int storedMonsterQuantity;
+                    try{
+                        storedMonsterQuantity = Integer.valueOf(
+                            database.query("SELECT " + currentCampaignName + " FROM entities" + 
+                            " WHERE id = " + entity.getID()).get(0, currentCampaignName)
                         );
+                    } catch (NullPointerException e){
+                        storedMonsterQuantity = 0;
                     }
+
+                    try{
+                        int monsterQuantity = Integer.valueOf(this.monsterQuantityTextField.getText());
+                        //set the amount of monsters in the db
+                        database.modify("UPDATE entities SET " + currentCampaignName + " = " + 
+                        (monsterQuantity + storedMonsterQuantity) + " WHERE id = " + entity.getID());
+
+                        //add the amount of monsters desired to the associate pan
+                        for (int i = 0; i < monsterQuantity; i ++){
+                            this.associatedPane.getChildren().add(
+                                new OptionEntityWidget(entity, 10)
+                            );
+                        }
+                    } catch (NumberFormatException e){ // inform the user that they must use an integer 
+                        this.monsterQuantityTextField.setText(null);
+                        this.monsterQuantityTextField.setPromptText("Must enter an integer!");
+                        
+                    }
+                    
 
                 }
 
