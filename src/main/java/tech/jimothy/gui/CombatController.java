@@ -1,18 +1,21 @@
 package tech.jimothy.gui;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import tech.jimothy.db.DataShare;
 import tech.jimothy.design.Effect;
 import tech.jimothy.design.EffectItemType;
-import tech.jimothy.design.Observable;
+import tech.jimothy.design.EntityProperty;
 import tech.jimothy.design.ObservableInt;
 import tech.jimothy.design.Observer;
 import tech.jimothy.errors.StageNotSetForNav;
@@ -34,6 +37,9 @@ public class CombatController{
     @FXML Label roundsLabel;
     @FXML Label timeLabel;
     @FXML private VBox effectsView;
+    @FXML private VBox propertiesView;
+    //Table view for properties
+    private TableView<EntityProperty> propertiesTable;
     //main view of the page
     @FXML VBox mainView;
     //the amount of rounds that have taken place
@@ -44,8 +50,8 @@ public class CombatController{
     int turns = 0;
     //entity with the current largest initiative
     EntityWidget topOfList;
-    //entity that is being focused on for the purpose of viewing effects/properties
-    EntityWidget focusedEntity;
+    //entity that is being selected for the purpose of viewing effects/properties
+    EntityWidget selectedEntity;
     //Indicates whether ot not the AddEffectsWidget currently exists
     boolean addEffectsWidgetExists = false;
 
@@ -76,20 +82,7 @@ public class CombatController{
         //Add entities to their VBox container, configuring them
         for (EntityWidget entity : sortedEntities){
             //set on click to populate effects and properties view
-            entity.setOnMouseClicked(event -> {
-                //if a entity has been selected in the past, reset its style.
-                if(this.focusedEntity != null){
-                    //? Find a way to not append the CSS?
-                    this.focusedEntity.setStyle(entity.getStyle() + "; -fx-border-width: 1px; -fx-border-color: Black;");
-                }
-                //highlight the border of the entity and set it as the focused entity
-                entity.setStyle(entity.getStyle() + "; -fx-border-width: 3px; -fx-border-color: Blue;");
-                this.focusedEntity = entity;
-
-                //populate the views
-                populateEffectsView();
-                populatePropertiesView();
-            });
+            entity.setOnMouseClicked(event -> {selectEntity(entity);});
 
             //create new 'add effect' menu option for entity widget
             MenuItem addEffectsOption = new MenuItem("Add Effect");
@@ -100,13 +93,24 @@ public class CombatController{
             entity.getChildren().add(new Label("Init: " + String.valueOf(entity.getInitiative())));
             entitiesContainer.getChildren().add(entity);
         }
+        //Insert tableview for properties
+        this.propertiesTable = new TableView<EntityProperty>();
+        this.propertiesView.getChildren().add(this.propertiesTable);
+
+        // ObservableList<EntityProperty> properties = FXCollections.observableList(new ArrayList<EntityProperty>());
+        // this.propertiesTable.setItems(properties);
+        //Set columns for properties TableView
+        TableColumn<EntityProperty, String> propertyNameCol = new TableColumn<>("Property");
+        propertyNameCol.setCellValueFactory(new PropertyValueFactory<>("propertyName"));
+        TableColumn<EntityProperty, String> valueCol = new TableColumn<>("Value");
+        valueCol.setCellValueFactory(new PropertyValueFactory<>("value"));
+        this.propertiesTable.getColumns().setAll(propertyNameCol, valueCol);
+
         //Set the entity that is at the top of turn order
         this.topOfList = EntitySortTools.greatestInitiative(this.entitiesContainer.getChildren());
 
-        //Set this first entity as the entity being focused on and then populate the views for that entity
-        this.focusedEntity = this.topOfList;
-        this.focusedEntity.setStyle(this.focusedEntity.getStyle() + "; -fx-border-width: 3px; -fx-border-color: Blue;");
-        populateEffectsView();
+        //Set this first entity as the entity being selected on and then populate the views for that entity
+        selectEntity(this.topOfList);
     }
 
     private void manifestAddEffectsWidget(EntityWidget assocEntity){
@@ -126,10 +130,10 @@ public class CombatController{
                             //register the effect object as an observer of the combat time
                             observableTime.registerObserver(effect);
                             
-                            //add an effect widget to the effects view IF this char is currently the one focused on
+                            //add an effect widget to the effects view IF this char is currently the one selected on
                             //AND the associated entity widget does not currently have an instance of the effect already(compare effect id)
                             if(!assocEntity.hasEffect(effect.getID())){
-                                if (assocEntity.equals(this.focusedEntity)){
+                                if (assocEntity.equals(this.selectedEntity)){
                                     EffectWidget effectWidget = new EffectWidget(effect, assocEntity);
 
 
@@ -155,10 +159,13 @@ public class CombatController{
         Node first = entities.get(0);
 
         //entity with greatest initiative will be the marker for each new round
-        topOfList = EntitySortTools.greatestInitiative(entities);
+        this.topOfList = EntitySortTools.greatestInitiative(entities);
 
         entities.remove(0);
         entities.add(first);
+
+        
+        selectEntity((EntityWidget)entities.get(0));
 
         if (entities.indexOf(topOfList) == 0){
             this.rounds += 1;
@@ -196,10 +203,10 @@ public class CombatController{
         //remove previous population
         this.effectsView.getChildren().removeAll(this.effectsView.getChildren());
 
-        ArrayList<Effect> charEffects = this.focusedEntity.getEffects();
+        ArrayList<Effect> charEffects = this.selectedEntity.getEffects();
 
         for (Effect effect : charEffects){
-            EffectWidget effectWidget = new EffectWidget(effect, this.focusedEntity);
+            EffectWidget effectWidget = new EffectWidget(effect, this.selectedEntity);
 
             this.effectsView.getChildren().add(effectWidget);
 
@@ -207,13 +214,63 @@ public class CombatController{
     }
 
     private void populatePropertiesView(){
-        ;
+        String [] propertyNames = {"Name",
+                                   "Type",
+                                   "Bonus",
+                                   "Initiative",
+                                   "ID",};
+
+        String[] strProperties = {this.selectedEntity.getName(),
+                                  this.selectedEntity.getType(),
+                                  String.valueOf(this.selectedEntity.getBonus()),
+                                  String.valueOf(this.selectedEntity.getInitiative()),
+                                  String.valueOf(this.selectedEntity.getID())};
+
+        ObservableList<EntityProperty> properties = FXCollections.observableList(new ArrayList<EntityProperty>());
+
+        for (int i = 0; i < propertyNames.length; i++){
+            EntityProperty entityProperty = new EntityProperty();
+
+            entityProperty.setPropertyName(propertyNames[i]);
+            entityProperty.setValue(strProperties[i]);
+
+            properties.add(entityProperty);
+        }
+
+        this.propertiesTable.setItems(properties);
     }
 
 
     public void endCombat() throws IOException, StageNotSetForNav{
         navigation.goToSelectedCampaignPage(DataShare.getInstance().getInt());
     }
+
+    /**
+     * Selects the specified entity widget. Upon selection, the entity widget's border is highlighted
+     * and the effects and property views are populated with information about that entity widget
+     * @param entityWidget the entity widget to be selected
+     */
+    private void selectEntity(EntityWidget entityWidget){
+        String normalStyle = "-fx-border-width: 0px; -fx-border-color: Black;";
+        String selectedStyle = "-fx-border-width: 3px; -fx-border-color: Blue;";
+        //if a entity has been selected in the past, reset its style.
+        if(this.selectedEntity != null){
+            this.selectedEntity.setStyle(entityWidget.getStyle().replace(selectedStyle, normalStyle));
+        }
+        //highlight the border of the entity and set it as the selected entity
+        if (entityWidget.getStyle().contains(normalStyle)){
+            entityWidget.setStyle(entityWidget.getStyle().replace(normalStyle, selectedStyle));
+        } else{
+            entityWidget.setStyle(entityWidget.getStyle() + selectedStyle);
+        }
+        
+        this.selectedEntity = entityWidget;
+
+        //populate the views
+        populateEffectsView();
+        populatePropertiesView();
+    }
+    
 
 }
  
