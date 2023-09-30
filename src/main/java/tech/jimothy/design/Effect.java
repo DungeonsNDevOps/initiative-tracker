@@ -3,6 +3,8 @@ package tech.jimothy.design;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import tech.jimothy.gui.custom.EffectWidget;
+
 /**
  * Class represents an in-game effect. It stores all of the pertinent data of an effect. 
  */
@@ -66,7 +68,7 @@ public class Effect implements Observer, Observable{
         return this.duration;
     }
 
-    public int getTime(){
+    public int getTimePassed(){
         return this.timePassed;
     }
 
@@ -86,10 +88,17 @@ public class Effect implements Observer, Observable{
     @Override
     public void update(){
         this.timePassed += 6;
-        System.out.println("\nEffect Name: \t" + this.getName() + 
-        "\nHash Code \t" + this.hashCode() +
-        "\nHow much time I have: \t" + this.getDuration() +
-        "\nHow much time has transpired: \t" + this.getTime());
+        // System.out.println("\nEffect Name: \t" + this.getName() + 
+        // "\nHash Code \t" + this.hashCode() +
+        // "\nHow much time I have: \t" + this.getDuration() +
+        // "\nHow much time has transpired: \t" + this.getTimePassed());
+
+        //sift through the observers -- if the observer is the effectwidget, update it's displayed time left
+        for (Observer o : this.observers){
+            if(o instanceof EffectWidget){
+                ((EffectWidget)o).updateDisplayedTimeLeft();
+            }
+        }
 
         //if this effect has expired, let the observers know
         if(this.isFinished()){
