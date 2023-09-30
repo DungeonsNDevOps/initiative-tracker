@@ -85,9 +85,7 @@ public class EntityWidget extends HBox implements Observer{
         this.type = soul.getType();
 
         //Configuration
-        this.setStyle("-fx-background-color: #AEB6B7;"+
-                      "-fx-border-radius: 10 10 10 10;"
-                      );
+        this.setStyle("-fx-background-color: #AEB6B7;");
 
         /*Make Children */
         Label entityNameLabel = new Label(name);
@@ -114,9 +112,7 @@ public class EntityWidget extends HBox implements Observer{
         this.type = type;
 
         //Configuration
-        this.setStyle("-fx-background-color: #AEB6B7;"+
-                      "-fx-border-radius: 10 10 10 10;"
-                      );
+        this.setStyle("-fx-background-color: #AEB6B7;");
 
         /*Make Children */
         Label entityNameLabel = new Label(name);
@@ -247,6 +243,7 @@ public class EntityWidget extends HBox implements Observer{
     public void removeEffects(ArrayList<Effect> effects){
         this.effects.removeAll(effects);
     }
+    
 
 //*-------------------Observer Methods---------------------------------------------
 
