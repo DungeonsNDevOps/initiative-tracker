@@ -41,7 +41,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="root" prefHeight="585.0" prefWidth="647.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.jimothy.gui.CombatController">
+<VBox fx:id="root" prefHeight="585.0" prefWidth="644.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.jimothy.gui.CombatController">
   <children>
       <SplitPane dividerPositions="0.7460815047021944" prefHeight="549.0" prefWidth="647.0">
          <items>
@@ -77,23 +77,23 @@
                               <Font size="19.0" />
                            </font>
                         </Label>
-                        <ScrollPane prefHeight="243.0" prefWidth="161.0">
+                        <ScrollPane prefHeight="243.0" prefWidth="160.0">
                            <content>
-                              <VBox fx:id="effectsView" prefHeight="154.0" prefWidth="157.0" />
+                              <VBox fx:id="effectsView" prefHeight="154.0" prefWidth="157.0" spacing="5.0" />
                            </content>
                         </ScrollPane>
                      </children>
                   </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <VBox prefHeight="200.0" prefWidth="160.0">
                      <children>
-                        <Label alignment="CENTER" prefHeight="46.0" prefWidth="161.0" text="Properties">
+                        <Label alignment="CENTER" prefHeight="46.0" prefWidth="160.0" text="Properties">
                            <font>
                               <Font size="19.0" />
                            </font>
                         </Label>
-                        <ScrollPane prefHeight="212.0" prefWidth="161.0">
+                        <ScrollPane prefHeight="193.0" prefWidth="160.0">
                            <content>
-                              <VBox prefHeight="153.0" prefWidth="157.0" />
+                              <VBox fx:id="propertiesView" prefHeight="191.0" prefWidth="157.0" />
                            </content>
                         </ScrollPane>
                      </children>
