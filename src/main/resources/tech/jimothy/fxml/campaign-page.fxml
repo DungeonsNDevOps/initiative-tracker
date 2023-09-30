@@ -32,12 +32,14 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <VBox fx:id="root" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.jimothy.gui.CampaignController">
   <children>
@@ -58,11 +60,16 @@
           </Menu>
         </menus>
       </MenuBar>
+      <Label alignment="CENTER" prefHeight="17.0" prefWidth="640.0" text="Campaigns">
+         <font>
+            <Font size="48.0" />
+         </font>
+      </Label>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <children>
             <ScrollPane fx:id="campaignScrollPane" prefHeight="375.0" prefWidth="640.0">
                <content>
-                  <VBox fx:id="campaignsVBox" alignment="CENTER" prefHeight="291.0" prefWidth="581.0" />
+                  <VBox fx:id="campaignsVBox" alignment="CENTER" prefHeight="291.0" prefWidth="637.0" />
                </content></ScrollPane>
          </children>
     </AnchorPane>
