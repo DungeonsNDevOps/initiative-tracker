@@ -80,7 +80,7 @@ public class CampaignController {
         Database database = new Database(DatabaseConfig.URL);
         Table campaignsTable = database.query("SELECT * FROM campaigns");
         
-        campaignsVBox.setSpacing(50.0);
+        campaignsVBox.setSpacing(20.0);
         
         for(int i = 0; i < campaignsTable.getSize(); i++){
             Button campaignButton = new Button(campaignsTable.get(i, "name"));
@@ -92,8 +92,8 @@ public class CampaignController {
                     e.printStackTrace();
                 }
             });
-            campaignButton.setMinWidth(campaignsVBox.getPrefWidth()-(campaignsVBox.getPrefWidth()*.2));
-            campaignButton.setMinHeight(60);
+            campaignButton.setPrefWidth(campaignsVBox.getPrefWidth()-(campaignsVBox.getPrefWidth()*.2));
+            campaignButton.setPrefHeight(30);
             campaignsVBox.getChildren().add(campaignButton);
         }
         database.close();
