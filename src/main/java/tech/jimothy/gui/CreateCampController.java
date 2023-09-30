@@ -61,8 +61,10 @@ public class CreateCampController {
             if(inputValid()){
                 database.insert("INSERT INTO campaigns(name) VALUES(?)", new String[] {campaignName});
                 //add a column to the entities table for the specified campaign for indication of association
-                database.modify("ALTER TABLE entities ADD " + campaignName + " INTEGER");
-
+                //then, initialize with zeros
+                database.modify("ALTER TABLE entities ADD " + campaignName + " INTEGER;" + 
+                                "UPDATE entities SET " + campaignName + " = 0");
+                //set value as 1 for characters that have been selected
                 for(Entity entity : charSelections){
                     // System.out.println(entity.getID());
                     database.modify("UPDATE entities SET " + campaignName + " = 1" + 

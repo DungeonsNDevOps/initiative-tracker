@@ -51,38 +51,85 @@ public class PrelimCombatController {
         Table campaignsTable = database.query("SELECT * FROM campaigns");
         String campaignName = campaignsTable.get(campaignID - 1, "name");
         Table entitiesTable = database.query("SELECT * FROM entities WHERE " +
-                                                campaignName + " = 1");
+                                                campaignName + " >= 1");
         
         for (int i = 0; i < entitiesTable.getSize(); i++){
-            EntityWidget entity = new EntityWidget(   0,
-                                                                entitiesTable.get(i, "name"),
-                                                                Integer.valueOf(entitiesTable.get(i, "bonus")),
-                                                                Integer.valueOf(entitiesTable.get(i, "id")),
-                                                                entitiesTable.get(i, "type")
-            );
-            spotlightPane.getChildren().add(entity);
 
-            TextField initTextField = new TextField();
-            Label bonusLabel = new Label('+' + entitiesTable.get(i, "bonus"));
-            
-            entity.getChildren().add(initTextField);
-            entity.getChildren().add(bonusLabel);
-            
-            initTextField.setPrefWidth(35.0);
 
-            //* Sets the onkeypressed event handle function to the handle function of the */
-            //* onkeypressed event handle function of SpotlightPane */
-            //* This allows for SpotlightPane to shift children even when the input focus is currently */
-            //* set on the particular textfield */
-            //TODO: Review lambda expressions and how they work in the context of javafx events
-            initTextField.setOnKeyPressed(event -> {
-                initTextField.getParent().getParent().getOnKeyPressed().handle(event);
-                ((EntityWidget)spotlightPane.getChildren() //get the children in the spotlightpane
-                                               .get(spotlightPane.getSpotlightIndex())) //get the node at the spotlight index and cast it to CharacterWidget
-                                               .getChildren() //get the children from the entitywidget
-                                               .get(2) // get the child at the second index, which is the text field
-                                               .requestFocus(); // request that the text field get the input focus
-            });
+            String entityName = entitiesTable.get(i, "name");
+            String entityType = entitiesTable.get(i, "type");
+            int entityID = Integer.valueOf(entitiesTable.get(i, "id"));
+            int entityBonus = Integer.valueOf(entitiesTable.get(i, "bonus"));
+            //get the quantity of the particular monster stored
+            int monsterQuantity = Integer.valueOf(database.query("SELECT " + campaignName + 
+            " FROM entities WHERE id = " + entityID).get(0, campaignName));
+            
+            //If the entity is a monster, we should add the amount of entity specified in db
+            if (entityType.equals("monster")){
+                for (int ii = 0; ii < monsterQuantity; ii++){
+                    EntityWidget entity = new EntityWidget(   0,
+                                                                entityName,
+                                                                entityBonus,
+                                                                entityID,
+                                                                entityType
+                    );
+
+                    spotlightPane.getChildren().add(entity);
+
+                    TextField initTextField = new TextField();
+                    Label bonusLabel = new Label('+' + entitiesTable.get(i, "bonus"));
+                    
+                    entity.getChildren().add(initTextField);
+                    entity.getChildren().add(bonusLabel);
+                    
+                    initTextField.setPrefWidth(35.0);
+
+                    //* Sets the onkeypressed event handle function to the handle function of the */
+                    //* onkeypressed event handle function of SpotlightPane */
+                    //* This allows for SpotlightPane to shift children even when the input focus is currently */
+                    //* set on the particular textfield */
+                    //TODO: Review lambda expressions and how they work in the context of javafx events
+                    initTextField.setOnKeyPressed(event -> {
+                        initTextField.getParent().getParent().getOnKeyPressed().handle(event);
+                        ((EntityWidget)spotlightPane.getChildren() //get the children in the spotlightpane
+                                                    .get(spotlightPane.getSpotlightIndex())) //get the node at the spotlight index and cast it to CharacterWidget
+                                                    .getChildren() //get the children from the entitywidget
+                                                    .get(2) // get the child at the second index, which is the text field
+                                                    .requestFocus(); // request that the text field get the input focus
+                    });
+                }
+            } else { //else just add one of the entity
+                EntityWidget entity = new EntityWidget(   0,
+                                                            entityName,
+                                                            entityBonus,
+                                                            entityID,
+                                                            entityType
+                );
+
+                spotlightPane.getChildren().add(entity);
+
+                TextField initTextField = new TextField();
+                Label bonusLabel = new Label('+' + entitiesTable.get(i, "bonus"));
+                
+                entity.getChildren().add(initTextField);
+                entity.getChildren().add(bonusLabel);
+                
+                initTextField.setPrefWidth(35.0);
+
+                //* Sets the onkeypressed event handle function to the handle function of the */
+                //* onkeypressed event handle function of SpotlightPane */
+                //* This allows for SpotlightPane to shift children even when the input focus is currently */
+                //* set on the particular textfield */
+                //TODO: Review lambda expressions and how they work in the context of javafx events
+                initTextField.setOnKeyPressed(event -> {
+                    initTextField.getParent().getParent().getOnKeyPressed().handle(event);
+                    ((EntityWidget)spotlightPane.getChildren() //get the children in the spotlightpane
+                                                .get(spotlightPane.getSpotlightIndex())) //get the node at the spotlight index and cast it to CharacterWidget
+                                                .getChildren() //get the children from the entitywidget
+                                                .get(2) // get the child at the second index, which is the text field
+                                                .requestFocus(); // request that the text field get the input focus
+                });
+            }
         }
 
         root.getChildren().add(spotlightPane);
