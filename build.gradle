@@ -1,6 +1,10 @@
 plugins {
   id 'application'
   id 'org.openjfx.javafxplugin' version '0.0.14'
+//   id "org.beryx.runtime" version "1.13.0"
+//   id 'org.beryx.jlink' version '2.26.0'
+  id 'java'
+  id 'edu.sc.seis.launch4j' version '3.0.5'
 }
 
 repositories {
@@ -27,5 +31,54 @@ dependencies {
 implementation 'org.xerial:sqlite-jdbc:3.42.0.0'
 }
 
+// jlink {
+//     options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages', '--bind-services']
+//     launcher {
+//         name = 'initiative-tracker'
+//     }
+// }
+
+// runtime {
+//     addOptions("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages")
+//     addModules("javafx.base", "javafx.controls", "javafx.fxml") // <----
+
+//     javaHome = 'C:\\Program Files\\Java\\jdk-17'
+
+//     launcher {
+//         noConsole = true
+//     }
+//     // jpackage {
+//     //     // Uncomment and adjust the following line if your runtime task is configured to generate images for multiple platforms
+//     //     // targetPlatformName = "mac"
+
+//     //     def currentOs = org.gradle.internal.os.OperatingSystem.current()
+//     //     def imgType = currentOs.windows ? 'ico' : currentOs.macOsX ? 'icns' : 'png'
+//     //     //imageOptions += ['--icon', "src/main/resources/hellofx.$imgType"]
+//     //     installerOptions += ['--resource-dir', "src/main/resources"]
+//     //     //installerOptions += ['--vendor', 'Acme Corporation']
+
+//     //     if(currentOs.windows) {
+//     //         installerOptions += ['--win-per-user-install', '--win-dir-chooser', '--win-menu', '--win-shortcut']
+//     //     }
+//     //     else if (currentOs.linux) {
+//     //         installerOptions += ['--linux-package-name', 'hellofx','--linux-shortcut']
+//     //     }
+//     //     else if (currentOs.macOsX) {
+//     //         installerOptions += ['--mac-package-name', 'hellofx']
+//     //     }
+//     // }
+// }
 
 
+launch4j {
+  mainClassName = 'tech.jimothy.initracker.IniTracker'
+//   icon = "${projectDir}/icons/myApp.ico"
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs "src/main/resources"
+        }
+    }
+}
