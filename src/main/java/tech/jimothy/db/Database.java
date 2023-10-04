@@ -2,6 +2,8 @@ package tech.jimothy.db;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -64,13 +66,16 @@ public class Database {
                 System.out.println("The driver name is " + meta.getDriverName());  
                 System.out.println("Connection to database successful!"); 
                 //pass the path to database string to execSchema method call
-                execSchema(new File(getClass().getResource("/tech/jimothy/sql/schema.sql").getPath())); 
+                InputStream schemaStream = getClass().getResource("/tech/jimothy/sql/schema.sql").openStream();
+                execSchema(schemaStream); 
             } else{
                 System.out.println("Database connect found to be null!");
             }
         } catch(SQLException e){
             System.out.println(e.getMessage());
         } catch(FileNotFoundException e){
+            e.printStackTrace();
+        } catch (IOException e){
             e.printStackTrace();
         }
     }
@@ -106,7 +111,7 @@ public class Database {
      * @param schema The given File object to be execute
      * @throws FileNotFoundException Throws if the file is not found
      */
-    private void execSchema(File schema) throws FileNotFoundException{
+    private void execSchema(InputStream schema) throws FileNotFoundException{
         Scanner schemaScan = new Scanner(schema);
         File dbFile = new File(this.url);
         String sql = "";
